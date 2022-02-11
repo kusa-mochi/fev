@@ -1,2 +1,2 @@
 # fev
-file explorer with versioning using Git for windows 11.
+File Explorer with Versioning using git for windows 11.
