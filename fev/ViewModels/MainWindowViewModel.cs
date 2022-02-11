@@ -1,6 +1,8 @@
 ﻿using Prism.Mvvm;
 using Prism.Regions;
 
+using fev.Models;
+
 namespace fev.ViewModels
 {
     public class MainWindowViewModel : BindableBase
@@ -19,5 +21,7 @@ namespace fev.ViewModels
         {
             this.RegionManager.RequestNavigate("ContentRegion", viewName);
         }
+
+        private GitManager _git = new GitManager();
     }
 }
