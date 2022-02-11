@@ -1,19 +1,23 @@
 ﻿using Prism.Mvvm;
+using Prism.Regions;
 
 namespace fev.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "Prism Application";
-        public string Title
+        public IRegionManager RegionManager { get; }
+
+        public MainWindowViewModel(IRegionManager regionManager)
         {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
+            this.RegionManager = regionManager;
+
+            // initialize content region.
+            this.RegionManager.RegisterViewWithRegion("ContentRegion", typeof(fev.Views.Checkout));
         }
 
-        public MainWindowViewModel()
+        public void NavigateTo(string viewName)
         {
-
+            this.RegionManager.RequestNavigate("ContentRegion", viewName);
         }
     }
 }
