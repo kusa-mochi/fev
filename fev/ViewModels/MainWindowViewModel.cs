@@ -14,7 +14,7 @@ namespace fev.ViewModels
             this.RegionManager = regionManager;
 
             // initialize content region.
-            this.RegionManager.RegisterViewWithRegion("ContentRegion", typeof(fev.Views.Checkout));
+            this.RegionManager.RegisterViewWithRegion("ContentRegion", typeof(fev.Views.RepositoryList));
         }
 
         public void NavigateTo(string viewName)
