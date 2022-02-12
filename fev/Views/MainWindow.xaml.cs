@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using fev.Common;
+
 namespace fev.Views
 {
     /// <summary>
@@ -9,7 +11,11 @@ namespace fev.Views
     {
         public MainWindow()
         {
+            _logManager.AppendLog("begin.");
             InitializeComponent();
+            _logManager.AppendLog("fin.");
         }
+
+        private LogManager _logManager = LogManager.GetInstance();
     }
 }
