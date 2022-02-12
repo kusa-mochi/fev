@@ -6,10 +6,7 @@
     <AssemblyName>fev</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\git.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Resources\git.exe">
+    <Content Include="Resources\**">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
