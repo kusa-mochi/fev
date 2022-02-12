@@ -7,7 +7,7 @@ namespace fev.Models
 {
     internal class GitManager
     {
-        public GitManager()
+        internal GitManager()
         {
             try
             {
@@ -20,7 +20,7 @@ namespace fev.Models
             }
         }
 
-        public void TestRun()
+        internal void TestRun()
         {
             _proc = new Process
             {
