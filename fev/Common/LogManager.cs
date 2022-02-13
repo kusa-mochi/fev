@@ -6,6 +6,9 @@ using System.Text;
 
 namespace fev.Common
 {
+    /// <summary>
+    /// singleton class for logging app.
+    /// </summary>
     internal class LogManager : IDisposable
     {
         internal void AppendLog(string s)
