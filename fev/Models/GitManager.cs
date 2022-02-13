@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -80,9 +80,9 @@ namespace fev.Models
             _logManager.AppendLog("fin.");
         }
 
-        internal void Checkout(string url)
+        internal void Clone(string url, string directoryPath)
         {
-
+            GitOutput result = RunGitCommand($"clone {url} {directoryPath}");
         }
 
         private Process _proc = null;
