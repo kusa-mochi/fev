@@ -14,10 +14,10 @@ namespace fev
             return Container.Resolve<MainWindow>();
         }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        protected override void RegisterTypes(IContainerRegistry reg)
         {
-            containerRegistry.RegisterForNavigation<Checkout>();
-            containerRegistry.RegisterForNavigation<Explorer>();
+            reg.RegisterForNavigation<Checkout>();
+            reg.RegisterForNavigation<RepositoryList>();
         }
     }
 }
