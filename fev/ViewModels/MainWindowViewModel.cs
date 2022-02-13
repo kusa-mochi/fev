@@ -21,7 +21,5 @@ namespace fev.ViewModels
         {
             this.RegionManager.RequestNavigate("ContentRegion", viewName);
         }
-
-        private GitManager _git = new GitManager();
     }
 }
