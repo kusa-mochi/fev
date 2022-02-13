@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MaterialDesignExtensions.Controls;
 
 using fev.Common;
 
@@ -7,7 +8,7 @@ namespace fev.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MaterialWindow
     {
         public MainWindow()
         {
