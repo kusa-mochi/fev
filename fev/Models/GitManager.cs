@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -14,6 +14,13 @@ namespace fev.Models
             TestRun();
         }
 
+        /// <summary>
+        /// run a git command.
+        /// if you would like to run "git clone xxxxx yyyyy",
+        /// you only have to put "clone xxxxx yyyyy" to the argument "gitArguments".
+        /// </summary>
+        /// <param name="gitArguments">git sub command and options</param>
+        /// <returns>standard output and error from git.exe</returns>
         internal GitOutput RunGitCommand(string gitArguments = "")
         {
             _proc = new Process
@@ -50,6 +57,12 @@ namespace fev.Models
             };
         }
 
+        /// <summary>
+        /// test run for git.exe.
+        /// this function run "git" command without any subcommands and options.
+        /// the standard output and error are shown on messageboxes.
+        /// if an error occured, an error message is shown on a messagebox.
+        /// </summary>
         internal void TestRun()
         {
             _logManager.AppendLog("begin.");
