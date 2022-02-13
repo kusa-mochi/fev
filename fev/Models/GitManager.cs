@@ -7,13 +7,11 @@ using fev.Common;
 
 namespace fev.Models
 {
+    /// <summary>
+    /// singleton class to wrap git.exe.
+    /// </summary>
     internal class GitManager
     {
-        internal GitManager()
-        {
-            TestRun();
-        }
-
         /// <summary>
         /// run a git command.
         /// if you would like to run "git clone xxxxx yyyyy",
@@ -85,6 +83,25 @@ namespace fev.Models
             GitOutput result = RunGitCommand($"clone {url} {directoryPath}");
         }
 
+        #region Constructor
+
+        /// <summary>
+        /// static method for singleton pattern.
+        /// </summary>
+        /// <returns>GitManager instance</returns>
+        internal static GitManager GetInstance()
+        {
+            return _gitManager;
+        }
+
+        private GitManager()
+        {
+
+        }
+
+        #endregion
+
+        private static GitManager _gitManager = new GitManager();
         private Process _proc = null;
         private string _exe = "Resources\\PortableGit\\cmd\\git.exe";
         private LogManager _logManager = LogManager.GetInstance();
