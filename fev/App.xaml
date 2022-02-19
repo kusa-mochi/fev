@@ -72,6 +72,8 @@
                             Value="False" />-->
                     </Style>
                 </ResourceDictionary>
+                <ResourceDictionary
+                    Source="ResourceDictionaries/Root.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

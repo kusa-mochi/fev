@@ -45,10 +45,24 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button
-                                    Style="{StaticResource MaterialDesignFlatLightBgButton}">
-                                    Remove
-                                </Button>
+                                <StackPanel
+                                    Orientation="Horizontal">
+                                    <Button
+                                        Style="{StaticResource MaterialDesignFlatLightBgButton}"
+                                        Margin="0,0,8,0">
+                                        <Image
+                                            Source="{StaticResource Pen}"
+                                            Width="16"
+                                            Height="16" />
+                                    </Button>
+                                    <Button
+                                        Style="{StaticResource MaterialDesignFlatLightBgButton}">
+                                        <Image
+                                            Source="{StaticResource Trush}"
+                                            Width="16"
+                                            Height="16" />
+                                    </Button>
+                                </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
