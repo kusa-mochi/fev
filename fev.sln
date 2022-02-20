@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fev", "fev\fev.csproj", "{46656C01-12D0-4691-A423-07DEA230C250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fev", "fev\fev.csproj", "{46656C01-12D0-4691-A423-07DEA230C250}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MochiWpfCommon", "MochiWpfCommon\MochiWpfCommon.csproj", "{020FA33A-E952-443D-9F30-53475A4B1940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{46656C01-12D0-4691-A423-07DEA230C250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46656C01-12D0-4691-A423-07DEA230C250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46656C01-12D0-4691-A423-07DEA230C250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{020FA33A-E952-443D-9F30-53475A4B1940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{020FA33A-E952-443D-9F30-53475A4B1940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{020FA33A-E952-443D-9F30-53475A4B1940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{020FA33A-E952-443D-9F30-53475A4B1940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
