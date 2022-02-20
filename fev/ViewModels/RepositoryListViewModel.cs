@@ -36,7 +36,20 @@ namespace fev.ViewModels
 
         void ExecuteOpenNewRepositoryDialogCommand()
         {
-            _dialogService.ShowDialog(typeof(fev.Views.NewRepositoryDialog).Name);
+            _dialogService.ShowDialog(typeof(fev.Views.NewRepositoryDialog).Name, result =>
+            {
+                switch (result.Result)
+                {
+                    case ButtonResult.OK:
+                        System.Windows.MessageBox.Show("OK button !!!");
+                        break;
+                    case ButtonResult.Cancel:
+                        System.Windows.MessageBox.Show("Cancel button !!!");
+                        break;
+                    default:
+                        break;
+                }
+            });
         }
 
         #endregion

@@ -50,8 +50,8 @@
                 <Button Grid.Column="2" Click="OpenFolderSelectDialog" VerticalAlignment="Center">...</Button>
             </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Margin="0,0,8,0">OK</Button>
-                <Button>Cancel</Button>
+                <Button Command="{Binding OkCommand}" Margin="0,0,8,0">OK</Button>
+                <Button Command="{Binding CancelCommand}">Cancel</Button>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
@@ -69,6 +70,28 @@ namespace fev.ViewModels
         {
             get { return _workingDirectoryPath; }
             set { SetProperty(ref _workingDirectoryPath, value); }
+        }
+
+        #endregion
+
+        #region Commands
+
+        private DelegateCommand _okCommand;
+        public DelegateCommand OkCommand =>
+            _okCommand ?? (_okCommand = new DelegateCommand(ExecuteOkCommand));
+
+        void ExecuteOkCommand()
+        {
+            RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+        }
+
+        private DelegateCommand _cancelCommand;
+        public DelegateCommand CancelCommand =>
+            _cancelCommand ?? (_cancelCommand = new DelegateCommand(ExecuteCancelCommand));
+
+        void ExecuteCancelCommand()
+        {
+            RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
         }
 
         #endregion
