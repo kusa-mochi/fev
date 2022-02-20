@@ -50,6 +50,13 @@ namespace fev.ViewModels
             set { SetProperty(ref _isLocalEnabled, value); }
         }
 
+        private string _workingDirectoryPath;
+        public string WorkingDirectoryPath
+        {
+            get { return _workingDirectoryPath; }
+            set { SetProperty(ref _workingDirectoryPath, value); }
+        }
+
         #endregion
 
         public string Title => "New Folder Settings";

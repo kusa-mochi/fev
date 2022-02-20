@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using fev.ViewModels;
 
 namespace fev.Views
 {
@@ -21,6 +23,28 @@ namespace fev.Views
         public NewRepositoryDialog()
         {
             InitializeComponent();
+            _vm = new NewRepositoryDialogViewModel();
+            this.DataContext = _vm;
         }
+
+        private void OpenFolderSelectDialog(object sender, RoutedEventArgs e)
+        {
+            using (CommonOpenFileDialog dlg = new CommonOpenFileDialog()
+            {
+                Title = "Choose a directory",
+                IsFolderPicker = true,
+                RestoreDirectory = true,
+                Multiselect = false
+            })
+            {
+                CommonFileDialogResult result = dlg.ShowDialog();
+                if (result != CommonFileDialogResult.Ok) return;
+
+                string dirPath = dlg.FileName;
+                _vm.WorkingDirectoryPath = dirPath;
+            }
+        }
+
+        private NewRepositoryDialogViewModel _vm = null;
     }
 }
