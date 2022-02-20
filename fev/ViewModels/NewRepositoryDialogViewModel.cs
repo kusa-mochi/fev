@@ -13,7 +13,7 @@ namespace fev.ViewModels
     {
         #region Properties
 
-        private RepositoryPlace _repositoryPlace;
+        private RepositoryPlace _repositoryPlace = RepositoryPlace.Remote;
         public RepositoryPlace RepositoryPlace
         {
             get { return _repositoryPlace; }
@@ -36,21 +36,35 @@ namespace fev.ViewModels
             }
         }
 
-        private bool _isRemoteEnabled;
+        private bool _isRemoteEnabled = true;
         public bool IsRemoteEnabled
         {
             get { return _isRemoteEnabled; }
             set { SetProperty(ref _isRemoteEnabled, value); }
         }
 
-        private bool _isLocalEnabled;
+        private bool _isLocalEnabled = false;
         public bool IsLocalEnabled
         {
             get { return _isLocalEnabled; }
             set { SetProperty(ref _isLocalEnabled, value); }
         }
 
-        private string _workingDirectoryPath;
+        private string _remoteRepositoryUrl = "";
+        public string RemoteRepositoryUrl
+        {
+            get { return _remoteRepositoryUrl; }
+            set { SetProperty(ref _remoteRepositoryUrl, value); }
+        }
+
+        private string _localBareRepositoryPath = "";
+        public string LocalBareRepositoryPath
+        {
+            get { return _localBareRepositoryPath; }
+            set { SetProperty(ref _localBareRepositoryPath, value); }
+        }
+
+        private string _workingDirectoryPath = "";
         public string WorkingDirectoryPath
         {
             get { return _workingDirectoryPath; }
