@@ -17,7 +17,37 @@ namespace fev.ViewModels
         public RepositoryPlace RepositoryPlace
         {
             get { return _repositoryPlace; }
-            set { SetProperty(ref _repositoryPlace, value); }
+            set
+            {
+                switch (value)
+                {
+                    case RepositoryPlace.Remote:
+                        IsRemoteEnabled = true;
+                        IsLocalEnabled = false;
+                        break;
+                    case RepositoryPlace.Local:
+                        IsRemoteEnabled = false;
+                        IsLocalEnabled = true;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("value");
+                }
+                SetProperty(ref _repositoryPlace, value);
+            }
+        }
+
+        private bool _isRemoteEnabled;
+        public bool IsRemoteEnabled
+        {
+            get { return _isRemoteEnabled; }
+            set { SetProperty(ref _isRemoteEnabled, value); }
+        }
+
+        private bool _isLocalEnabled;
+        public bool IsLocalEnabled
+        {
+            get { return _isLocalEnabled; }
+            set { SetProperty(ref _isLocalEnabled, value); }
         }
 
         #endregion

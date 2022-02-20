@@ -1,85 +1,53 @@
-<UserControl
-    x:Class="fev.Views.NewRepositoryDialog"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="http://prismlibrary.com/"
-    prism:ViewModelLocator.AutoWireViewModel="True"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Converters="clr-namespace:fev.Converters"
-    xmlns:local="clr-namespace:fev.Views"
-    mc:Ignorable="d"
-    d:DesignHeight="450"
-    d:DesignWidth="500"
-    Width="500"
-    Height="Auto">
+<UserControl x:Class="fev.Views.NewRepositoryDialog" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:prism="http://prismlibrary.com/"
+        prism:ViewModelLocator.AutoWireViewModel="True" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:Converters="clr-namespace:fev.Converters" xmlns:local="clr-namespace:fev.Views" mc:Ignorable="d"
+        d:DesignHeight="450" d:DesignWidth="500" Width="500" Height="Auto">
     <UserControl.Resources>
-        <Converters:EnumToBoolConverter
-            x:Key="EnumToBoolConverter" />
+        <Converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
     </UserControl.Resources>
     <Grid>
-        <StackPanel
-            Margin="32">
-            <TextBlock
-                Text="Repository Place" />
-            <StackPanel
-                Margin="16,0,0,0">
+        <StackPanel Margin="32">
+            <TextBlock Text="Repository Place" />
+            <StackPanel Margin="16,0,0,0">
                 <RadioButton
-                    IsChecked="{Binding RepositoryPlace, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Remote}"
-                    Content="Remote Git Repository" />
-                <Grid
-                    Margin="24,0,0,0">
+                        IsChecked="{Binding RepositoryPlace, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Remote}"
+                        Content="Remote Git Repository" />
+                <Grid Margin="24,0,0,0" IsEnabled="{Binding IsRemoteEnabled}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="100" />
+                        <ColumnDefinition Width="100" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Text="Repository URL" />
-                    <TextBox
-                        Grid.Column="1" />
+                    <TextBlock Text="Repository URL" />
+                    <TextBox Grid.Column="1" />
                 </Grid>
                 <RadioButton
-                    IsChecked="{Binding RepositoryPlace, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Local}"
-                    Content="Local Folder" />
-                <Grid
-                    Margin="24,0,0,0">
+                        IsChecked="{Binding RepositoryPlace, Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Local}"
+                        Content="Local Folder" />
+                <Grid Margin="24,0,0,0" IsEnabled="{Binding IsLocalEnabled}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                            Width="100" />
+                        <ColumnDefinition Width="100" />
                         <ColumnDefinition />
-                        <ColumnDefinition
-                            Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Text="Folder Path" />
-                    <TextBox
-                        Grid.Column="1" />
-                    <Button
-                        Grid.Column="2">...</Button>
+                    <TextBlock Text="Folder Path" />
+                    <TextBox Grid.Column="1" />
+                    <Button Grid.Column="2">...</Button>
                 </Grid>
             </StackPanel>
-            <TextBlock
-                Text="Working Directory" />
-            <Grid
-                Margin="24,0,0,0">
+            <TextBlock Text="Working Directory" />
+            <Grid Margin="24,0,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition
-                        Width="100" />
+                    <ColumnDefinition Width="100" />
                     <ColumnDefinition />
-                    <ColumnDefinition
-                        Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock
-                    Text="Folder Path" />
-                <TextBox
-                    Grid.Column="1" />
-                <Button
-                    Grid.Column="2">...</Button>
+                <TextBlock Text="Folder Path" />
+                <TextBox Grid.Column="1" />
+                <Button Grid.Column="2">...</Button>
             </Grid>
-            <StackPanel
-                Orientation="Horizontal"
-                HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button>OK</Button>
                 <Button>Cancel</Button>
             </StackPanel>
