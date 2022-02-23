@@ -16,17 +16,24 @@ namespace fwv.ViewModels
 
         private IRegionManager _regionManager = null;
         private IDialogService _dialogService = null;
-        private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         private GitManager _git = GitManager.GetInstance();
 
         #endregion
 
         #region Properties
 
+        private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         public ObservableCollection<RepositoryListItem> Repositories
         {
             get { return _repositories; }
             set { SetProperty(ref _repositories, value); }
+        }
+
+        private RepositoryListItem _activeItem = null;
+        public RepositoryListItem ActiveItem
+        {
+            get { return _activeItem; }
+            set { SetProperty(ref _activeItem, value); }
         }
 
         #endregion
@@ -36,7 +43,6 @@ namespace fwv.ViewModels
         private DelegateCommand _openNewRepositoryDialogCommand;
         public DelegateCommand OpenNewRepositoryDialogCommand =>
             _openNewRepositoryDialogCommand ?? (_openNewRepositoryDialogCommand = new DelegateCommand(ExecuteOpenNewRepositoryDialogCommand));
-
         void ExecuteOpenNewRepositoryDialogCommand()
         {
             _dialogService.ShowDialog(typeof(fwv.Views.NewRepositoryDialog).Name, result =>
@@ -75,6 +81,21 @@ namespace fwv.ViewModels
                         break;
                 }
             });
+        }
+
+        private DelegateCommand<string> _removeRepositoryCommand;
+        public DelegateCommand<string> RemoveRepositoryCommand =>
+            _removeRepositoryCommand ?? (_removeRepositoryCommand = new DelegateCommand<string>(ExecuteRemoveRepositoryCommand));
+        void ExecuteRemoveRepositoryCommand(string parameter)
+        {
+            foreach (RepositoryListItem item in Repositories)
+            {
+                if (parameter == item.Hash)
+                {
+                    Repositories.Remove(item);
+                    break;
+                }
+            }
         }
 
         #endregion
