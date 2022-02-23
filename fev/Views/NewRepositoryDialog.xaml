@@ -34,7 +34,7 @@
                     <TextBlock Text="Folder Path" VerticalAlignment="Center" />
                     <TextBox Grid.Column="1" Text="{Binding LocalBareRepositoryPath}" VerticalAlignment="Center"
                             Margin="0,0,8,0" />
-                    <Button Grid.Column="2" VerticalAlignment="Center">...</Button>
+                    <Button Grid.Column="2" Click="SelectLocalBareRepository" VerticalAlignment="Center">...</Button>
                 </Grid>
             </StackPanel>
             <TextBlock Text="Working Directory" Margin="0,16,0,16" />
@@ -47,7 +47,7 @@
                 <TextBlock Text="Folder Path" VerticalAlignment="Center" />
                 <TextBox Grid.Column="1" Text="{Binding WorkingDirectoryPath, Mode=TwoWay}" VerticalAlignment="Center"
                         Margin="0,0,8,0" />
-                <Button Grid.Column="2" Click="OpenFolderSelectDialog" VerticalAlignment="Center">...</Button>
+                <Button Grid.Column="2" Click="SelectWorkingDirectory" VerticalAlignment="Center">...</Button>
             </Grid>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Command="{Binding OkCommand}" Margin="0,0,8,0">OK</Button>

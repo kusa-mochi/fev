@@ -27,7 +27,25 @@ namespace fev.Views
             this.DataContext = _vm;
         }
 
-        private void OpenFolderSelectDialog(object sender, RoutedEventArgs e)
+        private void SelectLocalBareRepository(object sender, RoutedEventArgs e)
+        {
+            using (CommonOpenFileDialog dlg = new CommonOpenFileDialog()
+            {
+                Title = "Choose a directory",
+                IsFolderPicker = true,
+                RestoreDirectory = true,
+                Multiselect = false
+            })
+            {
+                CommonFileDialogResult result = dlg.ShowDialog();
+                if (result != CommonFileDialogResult.Ok) return;
+
+                string dirPath = dlg.FileName;
+                _vm.LocalBareRepositoryPath = dirPath;
+            }
+        }
+
+        private void SelectWorkingDirectory(object sender, RoutedEventArgs e)
         {
             using (CommonOpenFileDialog dlg = new CommonOpenFileDialog()
             {
