@@ -16,7 +16,7 @@ namespace fev.ViewModels
 
         private IRegionManager _regionManager = null;
         private IDialogService _dialogService = null;
-        private ObservableCollection<RepositoryListItem> _repositories = null;
+        private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         private GitManager _git = GitManager.GetInstance();
 
         #endregion
@@ -59,6 +59,14 @@ namespace fev.ViewModels
                         _git.Clone(repositoryUrl, workingDirectory);
 
                         // TODO: if cloning is done successfully.
+
+                        Repositories.Add(
+                            new RepositoryListItem
+                            {
+                                RepositoryUrl = repositoryUrl,
+                                LocalDirectoryPath = workingDirectory
+                            }
+                        );
                         break;
                     case ButtonResult.Cancel:
                         System.Windows.MessageBox.Show("Cancel button !!!");
@@ -77,31 +85,6 @@ namespace fev.ViewModels
         {
             this._regionManager = regionManager;
             this._dialogService = dialogService;
-
-            // TODO: only for debugging -->
-            _repositories = new ObservableCollection<RepositoryListItem>() {
-                new RepositoryListItem() {
-                    RepositoryUrl = "https://aaa.bbb.com",
-                    LocalDirectoryPath = @"c:\xxx\yyy\"
-                },
-                new RepositoryListItem() {
-                    RepositoryUrl = "https://ccc.ddd.com",
-                    LocalDirectoryPath = @"c:\zzz\yyy\"
-                },
-                new RepositoryListItem() {
-                    RepositoryUrl = "https://eee.fff.com",
-                    LocalDirectoryPath = @"c:\xxx\zzz\"
-                },
-                new RepositoryListItem() {
-                    RepositoryUrl = "https://aaa.bbb.com",
-                    LocalDirectoryPath = @"c:\xxx\yyy\"
-                },
-                new RepositoryListItem() {
-                    RepositoryUrl = "https://aaa.bbb.com",
-                    LocalDirectoryPath = @"c:\xxx\yyy\"
-                }
-            };
-            // <-- only for debugging
         }
 
         #endregion
