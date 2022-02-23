@@ -82,7 +82,14 @@ namespace fev.ViewModels
 
         void ExecuteOkCommand()
         {
-            RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
+            DialogResultParameters p = new DialogResultParameters();
+            p.AddRange(new Dictionary<string, object> {
+                { "RepositoryPlace", RepositoryPlace.ToString() },
+                { "RemoteRepositoryUrl", RemoteRepositoryUrl },
+                { "LocalBareRepositoryPath", LocalBareRepositoryPath },
+                { "WorkingDirectoryPath", WorkingDirectoryPath }
+            });
+            RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
         }
 
         private DelegateCommand _cancelCommand;

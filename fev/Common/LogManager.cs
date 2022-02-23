@@ -8,15 +8,16 @@ namespace fev.Common
 {
     /// <summary>
     /// singleton class for logging app.
+    /// to get an instance, call GetInstance() method.
     /// </summary>
-    internal class LogManager : IDisposable
+    public class LogManager : IDisposable
     {
-        internal void AppendLog(string s)
+        public void AppendLog(string s)
         {
             AppendText(s, _logWriter);
         }
 
-        internal void AppendErrorLog(string s)
+        public void AppendErrorLog(string s)
         {
             AppendText(s, _errorLogWriter);
         }
@@ -74,7 +75,7 @@ namespace fev.Common
         /// static method for singleton pattern.
         /// </summary>
         /// <returns>LogManager instane</returns>
-        internal static LogManager GetInstance()
+        public static LogManager GetInstance()
         {
             return _logManager;
         }

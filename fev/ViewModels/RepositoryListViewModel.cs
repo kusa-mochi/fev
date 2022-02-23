@@ -1,9 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 
+using fev.Common;
 using fev.Models;
 
 namespace fev.ViewModels
@@ -12,9 +14,10 @@ namespace fev.ViewModels
     {
         #region Fields
 
-        public IRegionManager _regionManager = null;
-        public IDialogService _dialogService = null;
+        private IRegionManager _regionManager = null;
+        private IDialogService _dialogService = null;
         private ObservableCollection<RepositoryListItem> _repositories = null;
+        private GitManager _git = GitManager.GetInstance();
 
         #endregion
 
@@ -42,6 +45,21 @@ namespace fev.ViewModels
                 {
                     case ButtonResult.OK:
                         System.Windows.MessageBox.Show("OK button !!!");
+                        IDialogParameters p = result.Parameters;
+                        Enum.TryParse(p.GetValue<string>("RepositoryPlace"), out RepositoryPlace repositoryPlace);
+                        string repositoryUrl = repositoryPlace switch
+                        {
+                            RepositoryPlace.Remote => p.GetValue<string>("RemoteRepositoryUrl"),
+                            RepositoryPlace.Local => p.GetValue<string>("LocalBareRepositoryPath"),
+                            _ => throw new Exception("invalid result param \"RepositoryPlace\"")
+                        };
+                        string workingDirectory = p.GetValue<string>("WorkingDirectoryPath");
+
+                        // TODO: check if the destination directory is empty.
+
+                        _git.Clone(repositoryUrl, workingDirectory);
+
+                        // TODO: if cloning is done successfully.
                         break;
                     case ButtonResult.Cancel:
                         System.Windows.MessageBox.Show("Cancel button !!!");
