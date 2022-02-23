@@ -44,7 +44,6 @@ namespace fev.ViewModels
                 switch (result.Result)
                 {
                     case ButtonResult.OK:
-                        System.Windows.MessageBox.Show("OK button !!!");
                         IDialogParameters p = result.Parameters;
                         Enum.TryParse(p.GetValue<string>("RepositoryPlace"), out RepositoryPlace repositoryPlace);
                         string repositoryUrl = repositoryPlace switch
