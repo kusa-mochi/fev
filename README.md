@@ -1,5 +1,5 @@
 # fev
-File Explorer with Versioning using git for windows 11.
+File system watcher with Versioning using git for windows 11.
 
 # concept
 Make it possible for people who don't know Git to edit documents under version control.
