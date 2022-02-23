@@ -1,6 +1,7 @@
-﻿using fev.Views;
+﻿using System.Windows;
 using Prism.Ioc;
-using System.Windows;
+using fev.Views;
+using fev.ViewModels;
 
 namespace fev
 {
@@ -18,6 +19,7 @@ namespace fev
         {
             reg.RegisterForNavigation<Checkout>();
             reg.RegisterForNavigation<RepositoryList>();
+            reg.RegisterDialog<NewRepositoryDialog, NewRepositoryDialogViewModel>();
         }
     }
 }

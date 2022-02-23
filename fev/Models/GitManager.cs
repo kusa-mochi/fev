@@ -4,22 +4,24 @@ using System.Diagnostics;
 using System.Text;
 
 using fev.Common;
+using fev.Exceptions;
 
 namespace fev.Models
 {
     /// <summary>
     /// singleton class to wrap git.exe.
+    /// to get an instance, call GetInstance() method.
     /// </summary>
     internal class GitManager
     {
         /// <summary>
         /// run a git command.
         /// if you would like to run "git clone xxxxx yyyyy",
-        /// you only have to put "clone xxxxx yyyyy" to the argument "gitArguments".
+        /// you only have to call RunGitCommand("clone xxxxx yyyyy").
         /// </summary>
         /// <param name="gitArguments">git sub command and options</param>
         /// <returns>standard output and error from git.exe</returns>
-        internal GitOutput RunGitCommand(string gitArguments = "")
+        internal GitResult RunGitCommand(string gitArguments = "")
         {
             _proc = new Process
             {
@@ -48,11 +50,10 @@ namespace fev.Models
                 error += line + "\n";
             }
 
-            return new GitOutput
-            {
-                Output = output,
-                Error = error
-            };
+            _logManager.AppendLog(output);
+            _logManager.AppendErrorLog(error);
+
+            return new GitResult { StandardOutput = output, StandardError = error };
         }
 
         /// <summary>
@@ -66,9 +67,9 @@ namespace fev.Models
             _logManager.AppendLog("begin.");
             try
             {
-                GitOutput result = RunGitCommand();
-                System.Windows.MessageBox.Show(result.Output);
-                System.Windows.MessageBox.Show(result.Error);
+                GitResult result = RunGitCommand();
+                System.Windows.MessageBox.Show(result.StandardOutput);
+                System.Windows.MessageBox.Show(result.StandardError);
             }
             catch (Exception ex)
             {
@@ -78,9 +79,9 @@ namespace fev.Models
             _logManager.AppendLog("fin.");
         }
 
-        internal void Clone(string url, string directoryPath)
+        internal GitResult Clone(string url, string directoryPath)
         {
-            GitOutput result = RunGitCommand($"clone {url} {directoryPath}");
+            return RunGitCommand($"clone {url} {directoryPath}");
         }
 
         #region Constructor
