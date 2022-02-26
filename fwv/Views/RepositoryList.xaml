@@ -14,7 +14,8 @@
                 New
             </Button>
         </StackPanel>
-        <ListView DockPanel.Dock="Top" ItemsSource="{Binding Repositories}" SelectionMode="Single"
+        <ListView x:Name="_repositoryListView" DockPanel.Dock="Top" ItemsSource="{Binding Repositories}"
+                SelectedItem="{Binding ActiveItem, Mode=OneWayToSource}" SelectionMode="Single"
                 HorizontalAlignment="Stretch">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
@@ -27,7 +28,9 @@
                                     <Button Style="{StaticResource MaterialDesignFlatLightBgButton}" Margin="0,0,8,0">
                                         <Image Source="{StaticResource Pen}" Width="16" Height="16" />
                                     </Button>
-                                    <Button Style="{StaticResource MaterialDesignFlatLightBgButton}">
+                                    <Button Style="{StaticResource MaterialDesignFlatLightBgButton}"
+                                            Command="{Binding ElementName=_repositoryListView, Path=DataContext.RemoveRepositoryCommand}"
+                                            CommandParameter="{Binding Hash}">
                                         <Image Source="{StaticResource Trush}" Width="16" Height="16" />
                                     </Button>
                                 </StackPanel>
