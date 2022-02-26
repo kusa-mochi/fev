@@ -17,6 +17,7 @@ namespace fwv.Models
                 return Convert.ToBase64String(rawHash);
             }
         }
+        public bool IsModified { get; set; }
         public string RepositoryUrl { get; set; }
         public string LocalDirectoryPath { get; set; }
     }

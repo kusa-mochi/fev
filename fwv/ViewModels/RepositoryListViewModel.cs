@@ -17,6 +17,7 @@ namespace fwv.ViewModels
         private IRegionManager _regionManager = null;
         private IDialogService _dialogService = null;
         private GitManager _git = GitManager.GetInstance();
+        private FileWatcher _fileWatcher = new FileWatcher();
 
         #endregion
 
@@ -62,17 +63,21 @@ namespace fwv.ViewModels
 
                         // TODO: check if the destination directory is empty.
 
-                        _git.Clone(repositoryUrl, workingDirectory);
+                        GitResult gitResult =  _git.Clone(repositoryUrl, workingDirectory);
 
                         // TODO: if cloning is done successfully.
 
-                        Repositories.Add(
-                            new RepositoryListItem
-                            {
-                                RepositoryUrl = repositoryUrl,
-                                LocalDirectoryPath = workingDirectory
-                            }
-                        );
+                        RepositoryListItem newItem = new RepositoryListItem
+                        {
+                            IsModified = false,
+                            RepositoryUrl = repositoryUrl,
+                            LocalDirectoryPath = workingDirectory
+                        };
+
+                        Repositories.Add(newItem);
+
+                        // start watching.
+                        _fileWatcher.AddDirectory(newItem.Hash, newItem.LocalDirectoryPath);
                         break;
                     case ButtonResult.Cancel:
                         System.Windows.MessageBox.Show("Cancel button !!!");
@@ -100,12 +105,22 @@ namespace fwv.ViewModels
 
         #endregion
 
+        #region Methods
+
+        private void OnFilesModified(object sender, ModifiedEventArgs args)
+        {
+            string watcherHash = args.WatcherHash;
+        }
+
+        #endregion
+
         #region Constructors
 
         public RepositoryListViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
             this._regionManager = regionManager;
             this._dialogService = dialogService;
+            this._fileWatcher.Modified += OnFilesModified;
         }
 
         #endregion

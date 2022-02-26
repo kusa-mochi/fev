@@ -104,7 +104,7 @@ namespace fwv.Models
 
         private static GitManager _gitManager = new GitManager();
         private Process _proc = null;
-        private string _exe = "Resources\\PortableGit\\cmd\\git.exe";
+        private string _exe = "git";
         private LogManager _logManager = LogManager.GetInstance();
     }
 }

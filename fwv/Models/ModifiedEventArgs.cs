@@ -9,11 +9,13 @@ namespace fwv.Models
     {
         public string FullPath { get; set; }
         public string Name { get; set; }
+        public string WatcherHash { get; set; }
 
-        public ModifiedEventArgs(string directory, string name)
+        public ModifiedEventArgs(string directory, string name, string watcherHash)
         {
             FullPath = $"{directory}{name}";
             Name = name;
+            WatcherHash = watcherHash;
         }
     }
 
