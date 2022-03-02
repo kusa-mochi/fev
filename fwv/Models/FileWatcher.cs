@@ -71,9 +71,6 @@ namespace fwv.Models
 
             IdentifiedFileSystemWatcher watcher = sender as IdentifiedFileSystemWatcher;
             Modified.Invoke(sender, new ModifiedEventArgs(directory, name, watcher.Hash));
-
-            // TODO: debugging code.
-            System.Windows.MessageBox.Show("file is modified !!!");
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
