@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -165,7 +165,7 @@ namespace fwv.Models
             return RunGitCommand($"commit -m \"{message}\"");
         }
 
-        internal CommandOutput Push(string branch = "master")
+        internal CommandOutput Push(string branch = "main")
         {
             return RunGitCommand($"push origin {branch}");
         }
