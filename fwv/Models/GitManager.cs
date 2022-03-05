@@ -15,6 +15,8 @@ namespace fwv.Models
     /// </summary>
     internal class GitManager
     {
+        #region Properties
+
         private bool _CanRunGitCommand = true;
         internal bool CanRunGitCommand
         {
@@ -28,74 +30,18 @@ namespace fwv.Models
                 _CanRunGitCommand = value;
             }
         }
+
         internal string WorkingDirectory { get; set; } = null;
+
+        #endregion
+
+        #region Internal Methods
 
         internal void EnqueueCommand(GitCommandItemBase command)
         {
             _gitCommandQueue.Enqueue(command);
         }
 
-        private CommandOutput RunCommand(string fileName, string args)
-        {
-            _logManager.AppendLog($"runnig command.. \"{fileName} {args}\"");
-            if (!CanRunGitCommand)
-            {
-                string logMessage = $"git is busy now. command \"{fileName} {args}\" was not executed.";
-                _logManager.AppendErrorLog(logMessage);
-                return new CommandOutput { StandardOutput = "", StandardError = logMessage };
-            }
-
-            CanRunGitCommand = false;
-            if (WorkingDirectory == null)
-            {
-                CanRunGitCommand = true;
-                _logManager.AppendErrorLog("running command failed because the WorkingDirectory property is not set.");
-                throw new InvalidOperationException("WorkingDirectory property must be set before running commands.");
-            }
-
-            Process proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = fileName,
-                    Arguments = args,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    WorkingDirectory = WorkingDirectory
-                }
-            };
-
-            proc.EnableRaisingEvents = true;
-            proc.Exited += RunNextCommand;
-
-            bool ret = proc.Start();
-            string output = "";
-            string error = "";
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                string line = proc.StandardOutput.ReadLine();
-                output += line + "\n";
-            }
-            while (!proc.StandardError.EndOfStream)
-            {
-                string line = proc.StandardError.ReadLine();
-                error += line + "\n";
-            }
-
-            _logManager.AppendLog(output);
-            _logManager.AppendErrorLog(error);
-
-            return new CommandOutput { StandardOutput = output, StandardError = error };
-        }
-
-        private void RunNextCommand(object sender, EventArgs e)
-        {
-            _logManager.AppendLog("running next command..");
-            CanRunGitCommand = true;
-            RunCommandQueue(sender, null);
-        }
 
         internal CommandOutput RunWindowsCommand(string command)
         {
@@ -170,6 +116,72 @@ namespace fwv.Models
             return RunGitCommand($"push origin {branch}");
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private CommandOutput RunCommand(string fileName, string args)
+        {
+            _logManager.AppendLog($"runnig command.. \"{fileName} {args}\"");
+            if (!CanRunGitCommand)
+            {
+                string logMessage = $"git is busy now. command \"{fileName} {args}\" was not executed.";
+                _logManager.AppendErrorLog(logMessage);
+                return new CommandOutput { StandardOutput = "", StandardError = logMessage };
+            }
+
+            CanRunGitCommand = false;
+            if (WorkingDirectory == null)
+            {
+                CanRunGitCommand = true;
+                _logManager.AppendErrorLog("running command failed because the WorkingDirectory property is not set.");
+                throw new InvalidOperationException("WorkingDirectory property must be set before running commands.");
+            }
+
+            Process proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = fileName,
+                    Arguments = args,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    WorkingDirectory = WorkingDirectory
+                }
+            };
+
+            proc.EnableRaisingEvents = true;
+            proc.Exited += RunNextCommand;
+
+            bool ret = proc.Start();
+            string output = "";
+            string error = "";
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                string line = proc.StandardOutput.ReadLine();
+                output += line + "\n";
+            }
+            while (!proc.StandardError.EndOfStream)
+            {
+                string line = proc.StandardError.ReadLine();
+                error += line + "\n";
+            }
+
+            _logManager.AppendLog(output);
+            _logManager.AppendErrorLog(error);
+
+            return new CommandOutput { StandardOutput = output, StandardError = error };
+        }
+
+        private void RunNextCommand(object sender, EventArgs e)
+        {
+            _logManager.AppendLog("running next command..");
+            CanRunGitCommand = true;
+            RunCommandQueue(sender, null);
+        }
+
         private void RunCommandQueue(object sender, ElapsedEventArgs e)
         {
             if (_gitCommandQueue.Count == 0)
@@ -225,6 +237,8 @@ namespace fwv.Models
             }
         }
 
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -251,9 +265,13 @@ namespace fwv.Models
 
         #endregion
 
+        #region Fields
+
         private static GitManager _gitManager = new GitManager();
         private string _exe = "git";
         private LogManager _logManager = LogManager.GetInstance();
         private Queue<GitCommandItemBase> _gitCommandQueue = new Queue<GitCommandItemBase>();
+
+        #endregion
     }
 }
