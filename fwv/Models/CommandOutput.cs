@@ -4,7 +4,7 @@ using System.Text;
 
 namespace fwv.Models
 {
-    public struct GitResult
+    public struct CommandOutput
     {
         public string StandardOutput;
         public string StandardError;

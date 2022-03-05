@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -63,7 +64,8 @@ namespace fwv.ViewModels
 
                         // TODO: check if the destination directory is empty.
 
-                        GitResult gitResult =  _git.Clone(repositoryUrl, workingDirectory);
+                        _git.WorkingDirectory = workingDirectory;
+                        CommandOutput gitResult = _git.Clone(repositoryUrl, workingDirectory);
 
                         // TODO: if cloning is done successfully.
 
@@ -109,7 +111,21 @@ namespace fwv.ViewModels
 
         private void OnFilesModified(object sender, ModifiedEventArgs args)
         {
+            // a hash to recognize which directory is modified.
             string watcherHash = args.WatcherHash;
+
+            string workingDirectory = "";
+            foreach (RepositoryListItem item in Repositories)
+            {
+                if (item.Hash == watcherHash)
+                {
+                    workingDirectory = item.LocalDirectoryPath;
+                }
+            }
+
+            _git.EnqueueCommand(new GitAddCommanItem(workingDirectory));
+            _git.EnqueueCommand(new GitCommitCommanItem(workingDirectory));
+            _git.EnqueueCommand(new GitCPushCommandItem(workingDirectory));
         }
 
         #endregion

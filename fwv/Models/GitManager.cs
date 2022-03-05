@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Timers;
 
 using fwv.Common;
 using fwv.Exceptions;
@@ -14,6 +15,92 @@ namespace fwv.Models
     /// </summary>
     internal class GitManager
     {
+        private bool _CanRunGitCommand = true;
+        internal bool CanRunGitCommand
+        {
+            get
+            {
+                return _CanRunGitCommand;
+            }
+            set
+            {
+                _logManager.AppendLog($"set CanRunGitCommand {value}");
+                _CanRunGitCommand = value;
+            }
+        }
+        internal string WorkingDirectory { get; set; } = null;
+
+        internal void EnqueueCommand(GitCommandItemBase command)
+        {
+            _gitCommandQueue.Enqueue(command);
+        }
+
+        private CommandOutput RunCommand(string fileName, string args)
+        {
+            _logManager.AppendLog($"runnig command.. \"{fileName} {args}\"");
+            if (!CanRunGitCommand)
+            {
+                string logMessage = $"git is busy now. command \"{fileName} {args}\" was not executed.";
+                _logManager.AppendErrorLog(logMessage);
+                return new CommandOutput { StandardOutput = "", StandardError = logMessage };
+            }
+
+            CanRunGitCommand = false;
+            if (WorkingDirectory == null)
+            {
+                CanRunGitCommand = true;
+                _logManager.AppendErrorLog("running command failed because the WorkingDirectory property is not set.");
+                throw new InvalidOperationException("WorkingDirectory property must be set before running commands.");
+            }
+
+            Process proc = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = fileName,
+                    Arguments = args,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    WorkingDirectory = WorkingDirectory
+                }
+            };
+
+            proc.Exited += RunNextCommand;
+
+            bool ret = proc.Start();
+            string output = "";
+            string error = "";
+            while (!proc.StandardOutput.EndOfStream)
+            {
+                string line = proc.StandardOutput.ReadLine();
+                output += line + "\n";
+            }
+            while (!proc.StandardError.EndOfStream)
+            {
+                string line = proc.StandardError.ReadLine();
+                error += line + "\n";
+            }
+
+            _logManager.AppendLog(output);
+            _logManager.AppendErrorLog(error);
+
+            return new CommandOutput { StandardOutput = output, StandardError = error };
+        }
+
+        private void RunNextCommand(object sender, EventArgs e)
+        {
+            _logManager.AppendLog("running next command..");
+            CanRunGitCommand = true;
+            RunCommandQueue(sender, null);
+        }
+
+        internal CommandOutput RunWindowsCommand(string command)
+        {
+            return RunCommand("cmd.exe", command);
+        }
+
         /// <summary>
         /// run a git command.
         /// if you would like to run "git clone xxxxx yyyyy",
@@ -21,39 +108,9 @@ namespace fwv.Models
         /// </summary>
         /// <param name="gitArguments">git sub command and options</param>
         /// <returns>standard output and error from git.exe</returns>
-        internal GitResult RunGitCommand(string gitArguments = "")
+        internal CommandOutput RunGitCommand(string gitArguments = "")
         {
-            _proc = new Process
-            {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = _exe,
-                    Arguments = gitArguments,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false
-                }
-            };
-            _proc.Start();
-
-            string output = "";
-            string error = "";
-            while (!_proc.StandardOutput.EndOfStream)
-            {
-                string line = _proc.StandardOutput.ReadLine();
-                output += line + "\n";
-            }
-            while (!_proc.StandardError.EndOfStream)
-            {
-                string line = _proc.StandardError.ReadLine();
-                error += line + "\n";
-            }
-
-            _logManager.AppendLog(output);
-            _logManager.AppendErrorLog(error);
-
-            return new GitResult { StandardOutput = output, StandardError = error };
+            return RunCommand(_exe, gitArguments);
         }
 
         /// <summary>
@@ -62,12 +119,19 @@ namespace fwv.Models
         /// the standard output and error are shown on messageboxes.
         /// if an error occured, an error message is shown on a messagebox.
         /// </summary>
-        internal void TestRun()
+        internal CommandOutput TestRun()
         {
+            if (!CanRunGitCommand)
+            {
+                _logManager.AppendErrorLog("GitManager instance is busy now.");
+                return new CommandOutput { StandardOutput = "", StandardError = "" };
+            }
+
             _logManager.AppendLog("begin.");
+            CommandOutput result;
             try
             {
-                GitResult result = RunGitCommand();
+                result = RunGitCommand();
                 System.Windows.MessageBox.Show(result.StandardOutput);
                 System.Windows.MessageBox.Show(result.StandardError);
             }
@@ -75,13 +139,83 @@ namespace fwv.Models
             {
                 System.Windows.MessageBox.Show("error occured !!!");
                 System.Windows.MessageBox.Show(ex.Message);
+                result = new CommandOutput { StandardError = ex.Message, StandardOutput = "" };
             }
             _logManager.AppendLog("fin.");
+            return result;
         }
 
-        internal GitResult Clone(string url, string directoryPath)
+        internal CommandOutput Clone(string url, string directoryPath)
         {
-            return RunGitCommand($"clone {url} {directoryPath}");
+            return RunGitCommand($"clone {url} \"{directoryPath}\"");
+        }
+
+        internal CommandOutput Add(string filter = "*")
+        {
+            return RunGitCommand($"add {filter}");
+        }
+
+        internal CommandOutput Commit(string message = "files were modified.")
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                message = "files were modified.";
+            }
+            return RunGitCommand($"commit -m \"{message}\"");
+        }
+
+        internal CommandOutput Push(string branch = "master")
+        {
+            return RunGitCommand($"push origin {branch}");
+        }
+
+        private void RunCommandQueue(object sender, ElapsedEventArgs e)
+        {
+            //while (_gitCommandQueue.Count > 0)
+            //{
+            if (_gitCommandQueue.Count == 0 || !CanRunGitCommand) return;
+
+            GitCommandItemBase queueItem = _gitCommandQueue.Dequeue();
+            switch (queueItem.Command)
+            {
+                case GitCommand.Clone:
+                    {
+                        GitCloneCommandItem item = queueItem as GitCloneCommandItem;
+                        WorkingDirectory = item.WorkingDirectoryPath;
+                        Clone(item.RemoteUrl, item.WorkingDirectoryPath);
+                    }
+                    break;
+                case GitCommand.Add:
+                    {
+                        GitAddCommanItem item = queueItem as GitAddCommanItem;
+                        WorkingDirectory = item.WorkingDirectory;
+                        Add();
+                    }
+                    break;
+                case GitCommand.Commit:
+                    {
+                        GitCommitCommanItem item = queueItem as GitCommitCommanItem;
+                        WorkingDirectory = item.WorkingDirectory;
+                        Commit();
+                    }
+                    break;
+                case GitCommand.Push:
+                    {
+                        GitCPushCommandItem item = queueItem as GitCPushCommandItem;
+                        WorkingDirectory = item.WorkingDirectory;
+                        Push();
+                    }
+                    break;
+                case GitCommand.Pull:
+                    throw new NotImplementedException();
+                default:
+                    {
+                        string errorMessage = "invalid git command in queue.";
+                        _logManager.AppendErrorLog(errorMessage);
+                        throw new InvalidOperationException(errorMessage);
+                    }
+            }
+            //}
         }
 
         #region Constructor
@@ -97,14 +231,22 @@ namespace fwv.Models
 
         private GitManager()
         {
-
+            // start a timer to check git command queue at the intervals.
+            Timer timer = new Timer
+            {
+                Interval = Properties.Settings.Default.WatchInterval,
+                AutoReset = true,
+                Enabled = true
+            };
+            timer.Elapsed += RunCommandQueue;
+            timer.Start();
         }
 
         #endregion
 
         private static GitManager _gitManager = new GitManager();
-        private Process _proc = null;
         private string _exe = "git";
         private LogManager _logManager = LogManager.GetInstance();
+        private Queue<GitCommandItemBase> _gitCommandQueue = new Queue<GitCommandItemBase>();
     }
 }
