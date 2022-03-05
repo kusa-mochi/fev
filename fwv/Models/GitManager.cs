@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -67,6 +67,7 @@ namespace fwv.Models
                 }
             };
 
+            proc.EnableRaisingEvents = true;
             proc.Exited += RunNextCommand;
 
             bool ret = proc.Start();
@@ -171,9 +172,16 @@ namespace fwv.Models
 
         private void RunCommandQueue(object sender, ElapsedEventArgs e)
         {
-            //while (_gitCommandQueue.Count > 0)
-            //{
-            if (_gitCommandQueue.Count == 0 || !CanRunGitCommand) return;
+            if (_gitCommandQueue.Count == 0)
+            {
+                _logManager.AppendLog("there is no command to execute in the queue.");
+                return;
+            }
+            if (!CanRunGitCommand)
+            {
+                _logManager.AppendErrorLog("the git is busy now. Dequeue() was not called.");
+                return;
+            }
 
             GitCommandItemBase queueItem = _gitCommandQueue.Dequeue();
             switch (queueItem.Command)
@@ -215,7 +223,6 @@ namespace fwv.Models
                         throw new InvalidOperationException(errorMessage);
                     }
             }
-            //}
         }
 
         #region Constructor
