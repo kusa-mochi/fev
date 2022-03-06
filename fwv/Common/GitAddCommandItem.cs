@@ -6,14 +6,14 @@ using fwv.Common;
 
 namespace fwv.Common
 {
-    public class GitAddCommanItem : GitCommandItemBase
+    public class GitAddCommandItem : GitCommandItemBase
     {
         public override object Clone()
         {
             throw new NotImplementedException();
         }
 
-        public GitAddCommanItem(string workingDirectory)
+        public GitAddCommandItem(string workingDirectory)
         {
             Command = GitCommand.Add;
             WorkingDirectory = workingDirectory;

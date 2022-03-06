@@ -207,21 +207,21 @@ namespace fwv.Models
                     break;
                 case GitCommand.Add:
                     {
-                        GitAddCommanItem item = queueItem as GitAddCommanItem;
+                        GitAddCommandItem item = queueItem as GitAddCommandItem;
                         WorkingDirectory = item.WorkingDirectory;
                         Add();
                     }
                     break;
                 case GitCommand.Commit:
                     {
-                        GitCommitCommanItem item = queueItem as GitCommitCommanItem;
+                        GitCommitCommandItem item = queueItem as GitCommitCommandItem;
                         WorkingDirectory = item.WorkingDirectory;
                         Commit();
                     }
                     break;
                 case GitCommand.Push:
                     {
-                        GitCPushCommandItem item = queueItem as GitCPushCommandItem;
+                        GitPushCommandItem item = queueItem as GitPushCommandItem;
                         WorkingDirectory = item.WorkingDirectory;
                         Push();
                     }

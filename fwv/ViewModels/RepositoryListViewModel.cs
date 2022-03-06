@@ -123,9 +123,9 @@ namespace fwv.ViewModels
                 }
             }
 
-            _git.EnqueueCommand(new GitAddCommanItem(workingDirectory));
-            _git.EnqueueCommand(new GitCommitCommanItem(workingDirectory));
-            _git.EnqueueCommand(new GitCPushCommandItem(workingDirectory));
+            _git.EnqueueCommand(new GitAddCommandItem(workingDirectory));
+            _git.EnqueueCommand(new GitCommitCommandItem(workingDirectory));
+            _git.EnqueueCommand(new GitPushCommandItem(workingDirectory));
         }
 
         #endregion

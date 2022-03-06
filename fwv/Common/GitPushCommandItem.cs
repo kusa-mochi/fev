@@ -6,7 +6,7 @@ using fwv.Common;
 
 namespace fwv.Common
 {
-    public class GitCPushCommandItem : GitCommandItemBase
+    public class GitPushCommandItem : GitCommandItemBase
     {
         public string Branch = "main";
 
@@ -15,7 +15,7 @@ namespace fwv.Common
             throw new NotImplementedException();
         }
 
-        public GitCPushCommandItem(string workingDirectory, string branch = "main")
+        public GitPushCommandItem(string workingDirectory, string branch = "main")
         {
             Command = GitCommand.Push;
             WorkingDirectory = workingDirectory;
