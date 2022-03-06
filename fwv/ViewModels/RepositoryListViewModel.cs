@@ -99,6 +99,8 @@ namespace fwv.ViewModels
             {
                 if (parameter == item.Hash)
                 {
+                    // TODO: remove local directories/files.
+
                     Repositories.Remove(item);
                     break;
                 }
