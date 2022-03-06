@@ -42,6 +42,15 @@ namespace fwv.ViewModels
 
         #region Commands
 
+        private DelegateCommand _CreateRepositoryCommand;
+        public DelegateCommand CreateRepositoryCommand =>
+            _CreateRepositoryCommand ?? (_CreateRepositoryCommand = new DelegateCommand(ExecuteCreateRepositoryCommand));
+        void ExecuteCreateRepositoryCommand()
+        {
+            // TODO
+            throw new NotImplementedException();
+        }
+
         private DelegateCommand _openNewRepositoryDialogCommand;
         public DelegateCommand OpenNewRepositoryDialogCommand =>
             _openNewRepositoryDialogCommand ?? (_openNewRepositoryDialogCommand = new DelegateCommand(ExecuteOpenNewRepositoryDialogCommand));
