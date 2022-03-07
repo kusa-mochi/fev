@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -26,6 +26,7 @@ namespace fwv.Models
             if (string.IsNullOrEmpty(directoryPath)) return;
 
             IdentifiedFileSystemWatcher watcher = new IdentifiedFileSystemWatcher(directoryPath);
+            watcher.NotifyFilter = NotifyFilters.DirectoryName | NotifyFilters.FileName | NotifyFilters.LastWrite;
             watcher.Hash = hash;
             watcher.IncludeSubdirectories = true;
             watcher.EnableRaisingEvents = true;
