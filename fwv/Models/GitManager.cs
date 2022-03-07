@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -116,6 +116,12 @@ namespace fwv.Models
             return RunGitCommand($"push origin {branch}");
         }
 
+        internal CommandOutput Init(bool isBare = false, string initialBranch = "main")
+        {
+            string args = isBare ? $" --bare --shared --initial-branch={initialBranch}" : "";
+            return RunGitCommand($"init{args}");
+        }
+
         #endregion
 
         #region Private Methods
@@ -196,33 +202,37 @@ namespace fwv.Models
             }
 
             GitCommandItemBase queueItem = _gitCommandQueue.Dequeue();
+            _logManager.AppendLog($"a git \"{queueItem.Command.ToString()}\" command was dequeued.");
+            WorkingDirectory = queueItem.WorkingDirectory;
             switch (queueItem.Command)
             {
+                case GitCommand.Init:
+                    {
+                        GitInitCommandItem item = queueItem as GitInitCommandItem;
+                        Init(item.IsBare);
+                    }
+                    break;
                 case GitCommand.Clone:
                     {
                         GitCloneCommandItem item = queueItem as GitCloneCommandItem;
-                        WorkingDirectory = item.WorkingDirectoryPath;
                         Clone(item.RemoteUrl, item.WorkingDirectoryPath);
                     }
                     break;
                 case GitCommand.Add:
                     {
                         GitAddCommandItem item = queueItem as GitAddCommandItem;
-                        WorkingDirectory = item.WorkingDirectory;
                         Add();
                     }
                     break;
                 case GitCommand.Commit:
                     {
                         GitCommitCommandItem item = queueItem as GitCommitCommandItem;
-                        WorkingDirectory = item.WorkingDirectory;
                         Commit();
                     }
                     break;
                 case GitCommand.Push:
                     {
                         GitPushCommandItem item = queueItem as GitPushCommandItem;
-                        WorkingDirectory = item.WorkingDirectory;
                         Push();
                     }
                     break;

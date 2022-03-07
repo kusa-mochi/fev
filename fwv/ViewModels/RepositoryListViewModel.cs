@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -47,8 +48,21 @@ namespace fwv.ViewModels
             _CreateRepositoryCommand ?? (_CreateRepositoryCommand = new DelegateCommand(ExecuteCreateRepositoryCommand));
         void ExecuteCreateRepositoryCommand()
         {
-            // TODO
-            throw new NotImplementedException();
+            using (CommonOpenFileDialog dlg = new CommonOpenFileDialog()
+            {
+                Title = "Choose a directory",
+                IsFolderPicker = true,
+                RestoreDirectory = true,
+                Multiselect = false
+            })
+            {
+                CommonFileDialogResult result = dlg.ShowDialog();
+                if (result != CommonFileDialogResult.Ok) return;
+
+                string dirPath = dlg.FileName;
+                _git.WorkingDirectory = dirPath;
+                _git.Init(true);
+            }
         }
 
         private DelegateCommand _openNewRepositoryDialogCommand;
