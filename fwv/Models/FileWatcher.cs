@@ -75,6 +75,14 @@ namespace fwv.Models
             {
                 throw new ArgumentNullException("sender");
             }
+            if (string.IsNullOrEmpty(oldPath))
+            {
+                throw new ArgumentNullException("oldPath");
+            }
+            if (string.IsNullOrEmpty(newPath))
+            {
+                throw new ArgumentNullException("newPath");
+            }
 
             // if changes are in a ".git" folder.
             if (IsIgnoreObject(oldPath, newPath))
