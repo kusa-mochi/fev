@@ -163,19 +163,8 @@ namespace fwv.Models
             proc.Exited += RunNextCommand;
 
             bool ret = proc.Start();
-            string output = "";
-            string error = "";
-            while (!proc.StandardOutput.EndOfStream)
-            {
-                string line = proc.StandardOutput.ReadLine();
-                output += line + "\n";
-            }
-            while (!proc.StandardError.EndOfStream)
-            {
-                string line = proc.StandardError.ReadLine();
-                error += line + "\n";
-            }
-
+            string output = proc.StandardOutput.ReadToEnd();
+            string error = proc.StandardError.ReadToEnd();
             _logManager.AppendLog(output);
             _logManager.AppendErrorLog(error);
 
