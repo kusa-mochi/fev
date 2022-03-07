@@ -105,7 +105,6 @@ namespace fwv.ViewModels
                         _fileWatcher.AddDirectory(newItem.Hash, newItem.LocalDirectoryPath);
                         break;
                     case ButtonResult.Cancel:
-                        System.Windows.MessageBox.Show("Cancel button !!!");
                         break;
                     default:
                         break;
