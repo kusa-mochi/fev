@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -40,6 +40,7 @@ namespace fwv.Models
         internal void EnqueueCommand(GitCommandItemBase command)
         {
             _gitCommandQueue.Enqueue(command);
+            _logManager.AppendLog($"a git \"{command.Command.ToString()}\" command was enqueued.");
         }
 
 
