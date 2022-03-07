@@ -65,9 +65,7 @@ namespace fwv.Models
 
         private bool IsIgnoreObject(string oldPath, string newPath)
         {
-            FileAttributes oldAttr = File.GetAttributes(oldPath);
-            FileAttributes newAttr = File.GetAttributes(newPath);
-            bool ret = oldPath.Contains("\\.git") || newPath.Contains("\\.git") || (oldAttr.HasFlag(FileAttributes.Directory) && oldPath == newPath);
+            bool ret = oldPath.Contains("\\.git") || newPath.Contains("\\.git");
             return ret;
         }
 
@@ -111,22 +109,22 @@ namespace fwv.Models
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            OnModified(sender, WatcherChangeTypes.Changed, Path.GetDirectoryName(e.FullPath), Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Changed, e.FullPath, e.FullPath, e.Name);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
-            OnModified(sender, WatcherChangeTypes.Created, Path.GetDirectoryName(e.FullPath), Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Created, e.FullPath, e.FullPath, e.Name);
         }
 
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            OnModified(sender, WatcherChangeTypes.Deleted, Path.GetDirectoryName(e.FullPath), Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Deleted, e.FullPath, e.FullPath, e.Name);
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            OnModified(sender, WatcherChangeTypes.Renamed, Path.GetDirectoryName(e.OldFullPath), Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Renamed, e.OldFullPath, e.FullPath, e.Name);
         }
 
         public void Dispose()
