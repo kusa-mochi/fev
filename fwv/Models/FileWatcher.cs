@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -63,35 +63,70 @@ namespace fwv.Models
             }
         }
 
-        private void OnModified(object sender, string directory, string name)
+        private bool IsIgnoreObject(string oldPath, string newPath)
+        {
+            FileAttributes oldAttr = File.GetAttributes(oldPath);
+            FileAttributes newAttr = File.GetAttributes(newPath);
+            bool ret = oldPath.Contains("\\.git") || newPath.Contains("\\.git") || (oldAttr.HasFlag(FileAttributes.Directory) && oldPath == newPath);
+            return ret;
+        }
+
+        private void OnModified(object sender, WatcherChangeTypes changeType, string oldPath, string newPath, string newName)
         {
             if (sender == null)
             {
                 throw new ArgumentNullException("sender");
             }
 
+            // if changes are in a ".git" folder.
+            if (IsIgnoreObject(oldPath, newPath))
+            {
+                // do nothing.
+                return;
+            }
+
+            switch (changeType)
+            {
+                case WatcherChangeTypes.Created:
+                    _logManager.AppendLog($"\"{newPath}\" was created.");
+                    break;
+                case WatcherChangeTypes.Deleted:
+                    _logManager.AppendLog($"\"{oldPath}\" was deleted.");
+                    break;
+                case WatcherChangeTypes.Changed:
+                    _logManager.AppendLog($"\"{newPath}\" was changed.");
+                    break;
+                case WatcherChangeTypes.Renamed:
+                    _logManager.AppendLog($"\"{oldPath}\" was renamed to \"{newPath}\".");
+                    break;
+                case WatcherChangeTypes.All:
+                    break;
+                default:
+                    break;
+            }
+
             IdentifiedFileSystemWatcher watcher = sender as IdentifiedFileSystemWatcher;
-            Modified.Invoke(sender, new ModifiedEventArgs(directory, name, watcher.Hash));
+            Modified.Invoke(sender, new ModifiedEventArgs(newPath, newName, watcher.Hash));
         }
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            OnModified(sender, Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Changed, Path.GetDirectoryName(e.FullPath), Path.GetDirectoryName(e.FullPath), e.Name);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
-            OnModified(sender, Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Created, Path.GetDirectoryName(e.FullPath), Path.GetDirectoryName(e.FullPath), e.Name);
         }
 
         private void OnDeleted(object sender, FileSystemEventArgs e)
         {
-            OnModified(sender, Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Deleted, Path.GetDirectoryName(e.FullPath), Path.GetDirectoryName(e.FullPath), e.Name);
         }
 
         private void OnRenamed(object sender, RenamedEventArgs e)
         {
-            OnModified(sender, Path.GetDirectoryName(e.FullPath), e.Name);
+            OnModified(sender, WatcherChangeTypes.Renamed, Path.GetDirectoryName(e.OldFullPath), Path.GetDirectoryName(e.FullPath), e.Name);
         }
 
         public void Dispose()
