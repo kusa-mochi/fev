@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -121,6 +121,11 @@ namespace fwv.Models
         {
             string args = isBare ? $" --bare --shared --initial-branch={initialBranch}" : "";
             return RunGitCommand($"init{args}");
+        }
+
+        internal CommandOutput GetUserName()
+        {
+            return RunGitCommand("config --global user.name");
         }
 
         #endregion
