@@ -12,6 +12,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="Resources\Images\History.png" />
+    <Content Remove="Resources\Images\Pen.png" />
     <Content Remove="Resources\Images\trush.png" />
     <Content Remove="Resources\trush.png" />
   </ItemGroup>
@@ -25,6 +27,8 @@
     <PackageReference Include="Prism.Unity" Version="8.0.0.1909" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\History.png" />
+    <Resource Include="Resources\Images\Pen.png" />
     <Resource Include="Resources\Images\Trush.png" />
   </ItemGroup>
   <ItemGroup>

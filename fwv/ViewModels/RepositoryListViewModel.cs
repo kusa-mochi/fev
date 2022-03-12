@@ -191,6 +191,16 @@ namespace fwv.ViewModels
             }
         }
 
+        private DelegateCommand _OpenHistoryDialogCommand;
+        public DelegateCommand OpenHistoryDialogCommand =>
+            _OpenHistoryDialogCommand ?? (_OpenHistoryDialogCommand = new DelegateCommand(ExecuteOpenHistoryDialogCommand));
+        void ExecuteOpenHistoryDialogCommand()
+        {
+            _dialogService.ShowDialog(typeof(fwv.Views.HistoryDialog).Name, result =>
+            {
+            });
+        }
+
         #endregion
 
         #region Methods

@@ -142,6 +142,13 @@ namespace fwv.Models
             return RunGitCommand($"config --global user.name \"{userName}\"");
         }
 
+        internal CommandOutput Log(bool nameOnly = false)
+        {
+            string command = "log";
+            command += nameOnly ? " --name-only" : "";
+            return RunGitCommand(command);
+        }
+
         #endregion
 
         #region Private Methods
