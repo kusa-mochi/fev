@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -56,7 +56,7 @@ namespace fwv.Models
         /// </summary>
         /// <param name="gitArguments">git sub command and options</param>
         /// <returns>standard output and error from git.exe</returns>
-        internal CommandOutput RunGitCommand(string gitArguments = "")
+        private CommandOutput RunGitCommand(string gitArguments = "")
         {
             return RunCommand(_exe, gitArguments);
         }
