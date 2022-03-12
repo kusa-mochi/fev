@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +12,7 @@ namespace fwv.ViewModels
 {
     public class UserNameSettingViewModel : BindableBase, IDialogAware
     {
-        private string _userName = "dummy";
+        private string _userName = string.Empty;
         public string UserName
         {
             get { return _userName; }
