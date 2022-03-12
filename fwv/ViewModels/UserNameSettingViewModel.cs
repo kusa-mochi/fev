@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using Prism.Commands;
 using Prism.Mvvm;
@@ -16,12 +17,16 @@ namespace fwv.ViewModels
         public string UserName
         {
             get { return _userName; }
-            set { SetProperty(ref _userName, value); }
+            set
+            {
+                SetProperty(ref _userName, value);
+                OkCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private DelegateCommand _okCommand;
         public DelegateCommand OkCommand =>
-            _okCommand ?? (_okCommand = new DelegateCommand(ExecuteOkCommand));
+            _okCommand ?? (_okCommand = new DelegateCommand(ExecuteOkCommand, CanExecuteOkCommand));
         void ExecuteOkCommand()
         {
             DialogResultParameters p = new DialogResultParameters();
@@ -30,6 +35,11 @@ namespace fwv.ViewModels
                 { "UserName", UserName }
             });
             RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
+        }
+        bool CanExecuteOkCommand()
+        {
+            Console.WriteLine($"username: {UserName}");
+            return !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
         }
 
         #region Implementation of IDialogAware
