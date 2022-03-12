@@ -102,10 +102,11 @@ namespace fwv.ViewModels
         {
             _dialogService.ShowDialog(typeof(fwv.Views.NewRepositoryDialog).Name, result =>
             {
+                IDialogParameters p = result.Parameters;
+
                 switch (result.Result)
                 {
                     case ButtonResult.OK:
-                        IDialogParameters p = result.Parameters;
                         Enum.TryParse(p.GetValue<string>("RepositoryPlace"), out RepositoryPlace repositoryPlace);
                         string repositoryUrl = repositoryPlace switch
                         {
