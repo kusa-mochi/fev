@@ -26,6 +26,24 @@ namespace fwv.ViewModels
 
         #region Properties
 
+        private string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                SetProperty(ref _userName, value);
+                TopMessage = $"Hi, {_userName}";
+            }
+        }
+
+        private string _topMessage;
+        public string TopMessage
+        {
+            get { return _topMessage; }
+            set { SetProperty(ref _topMessage, value); }
+        }
+
         private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         public ObservableCollection<RepositoryListItem> Repositories
         {
@@ -68,6 +86,8 @@ namespace fwv.ViewModels
                         case ButtonResult.OK:
                             {
                                 string userInput = result.Parameters.GetValue<string>("UserName");
+                                _git.SetUserName(userInput);
+                                UserName = userInput;
                                 break;
                             }
                         default:
@@ -77,6 +97,10 @@ namespace fwv.ViewModels
                             }
                     }
                 });
+            }
+            else
+            {
+                UserName = currentUserName;
             }
         }
 

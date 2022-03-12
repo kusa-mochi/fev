@@ -128,6 +128,20 @@ namespace fwv.Models
             return RunGitCommand("config --global user.name");
         }
 
+        internal CommandOutput SetUserName(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                return new CommandOutput
+                {
+                    StandardOutput = "",
+                    StandardError = "invalid user name is input to GitManager."
+                };
+            }
+
+            return RunGitCommand($"config --global user.name \"{userName}\"");
+        }
+
         #endregion
 
         #region Private Methods

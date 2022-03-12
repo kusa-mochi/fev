@@ -5,9 +5,10 @@
         xmlns:mde="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:fwv.Views"
         prism:ViewModelLocator.AutoWireViewModel="True" mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
-    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                Orientation="Horizontal" Margin="8">
+    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Label Content="{Binding TopMessage}" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                Margin="8,0,0,0" Height="24" />
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center" Orientation="Horizontal" Margin="8,0,8,8">
             <Button Command="{Binding CreateRepositoryCommand}" Style="{StaticResource MaterialDesignFlatLightBgButton}"
                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,8,0">Create Repository</Button>
             <Button Command="{Binding OpenNewRepositoryDialogCommand}"
@@ -16,7 +17,7 @@
                 Checkout
             </Button>
         </StackPanel>
-        <ListView x:Name="_repositoryListView" DockPanel.Dock="Top" ItemsSource="{Binding Repositories}"
+        <ListView x:Name="_repositoryListView" ItemsSource="{Binding Repositories}"
                 SelectedItem="{Binding ActiveItem, Mode=OneWayToSource}" SelectionMode="Single"
                 HorizontalAlignment="Stretch">
             <ListView.View>
@@ -42,5 +43,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-    </DockPanel>
+    </StackPanel>
 </UserControl>
