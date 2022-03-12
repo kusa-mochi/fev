@@ -38,7 +38,6 @@ namespace fwv.ViewModels
         }
         bool CanExecuteOkCommand()
         {
-            Console.WriteLine($"username: {UserName}");
             return !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
         }
 
