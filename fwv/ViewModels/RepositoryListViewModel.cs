@@ -51,21 +51,25 @@ namespace fwv.ViewModels
         {
             _git.WorkingDirectory = string.Empty;
             CommandOutput commandOutput = _git.GetUserName();
-            string userName = commandOutput.StandardOutput;
+            string currentUserName = commandOutput.StandardOutput;
 
             // if a user name is not set to git global setting,
-            if (string.IsNullOrEmpty(userName))
+            if (string.IsNullOrEmpty(currentUserName))
             {
                 _log.AppendLog("user name is not registered yet.");
 
                 // show a dialog for setting user name.
                 _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
                 {
+                    IDialogParameters p = result.Parameters;
+
                     switch (result.Result)
                     {
                         case ButtonResult.OK:
-                            System.Windows.MessageBox.Show(result.Parameters.GetValue<string>("UserName"));
-                            break;
+                            {
+                                string userInput = result.Parameters.GetValue<string>("UserName");
+                                break;
+                            }
                         default:
                             break;
                     }
