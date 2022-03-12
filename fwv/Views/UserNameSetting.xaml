@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignHeight="640" d:DesignWidth="480" Width="640" Height="480">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="Input your name on the system." />
-        <TextBox Text="{Binding UserName}" />
+        <TextBox Text="{Binding UserName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" />
         <DockPanel>
             <Button DockPanel.Dock="Right" Command="{Binding OkCommand}">
                 OK
