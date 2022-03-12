@@ -43,6 +43,35 @@ namespace fwv.ViewModels
 
         #region Commands
 
+        private DelegateCommand _validateUserName;
+        public DelegateCommand ValidateUserName =>
+            _validateUserName ?? (_validateUserName = new DelegateCommand(ExecuteValidateUserName));
+        void ExecuteValidateUserName()
+        {
+            _git.WorkingDirectory = string.Empty;
+            CommandOutput commandOutput = _git.GetUserName();
+            string userName = commandOutput.StandardOutput;
+
+            // if a user name is not set to git global setting,
+            if (string.IsNullOrEmpty(userName))
+            {
+                _log.AppendLog("user name is not registered yet.");
+
+                // show a dialog for setting user name.
+                _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
+                {
+                    switch (result.Result)
+                    {
+                        case ButtonResult.OK:
+                            System.Windows.MessageBox.Show(result.Parameters.GetValue<string>("UserName"));
+                            break;
+                        default:
+                            break;
+                    }
+                });
+            }
+        }
+
         private DelegateCommand _CreateRepositoryCommand;
         public DelegateCommand CreateRepositoryCommand =>
             _CreateRepositoryCommand ?? (_CreateRepositoryCommand = new DelegateCommand(ExecuteCreateRepositoryCommand));

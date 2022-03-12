@@ -3,8 +3,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:fwv.Views"
         mc:Ignorable="d" d:DesignHeight="640" d:DesignWidth="480" Width="640" Height="480">
-    <StackPanel>
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <TextBlock Text="Input your name on the system." />
         <TextBox Text="{Binding UserName}" />
+        <DockPanel>
+            <Button DockPanel.Dock="Right" Command="{Binding OkCommand}">
+                OK
+            </Button>
+        </DockPanel>
     </StackPanel>
 </UserControl>
