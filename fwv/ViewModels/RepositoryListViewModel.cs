@@ -71,7 +71,10 @@ namespace fwv.ViewModels
                                 break;
                             }
                         default:
-                            break;
+                            {
+                                fwv.App.Current.Shutdown(1);
+                                break;
+                            }
                     }
                 });
             }
