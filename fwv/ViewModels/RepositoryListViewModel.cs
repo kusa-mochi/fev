@@ -20,6 +20,7 @@ namespace fwv.ViewModels
         private IDialogService _dialogService = null;
         private GitManager _git = GitManager.GetInstance();
         private FileWatcher _fileWatcher = new FileWatcher();
+        private LogManager _log = LogManager.GetInstance();
 
         #endregion
 
