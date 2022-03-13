@@ -4,6 +4,8 @@ File system Watcher with Versioning using git for windows 11.
 # concept
 You don't need to be a specialist in tools (such as Git) to manage file versions.
 
+You just use File Explorer as usual.
+
 # class diagram
 A class diagram is in "puml" directory.
 
