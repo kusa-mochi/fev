@@ -2,7 +2,7 @@
 File system Watcher with Versioning using git for windows 11.
 
 # concept
-Make it possible for people who don't know Git to edit documents under version control.
+You don't need to be a specialist in tools (such as Git) to manage file versions.
 
 # class diagram
 A class diagram is in "puml" directory.
