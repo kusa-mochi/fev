@@ -19,7 +19,9 @@ namespace fwv
         {
             reg.RegisterForNavigation<Checkout>();
             reg.RegisterForNavigation<RepositoryList>();
+            reg.RegisterDialog<UserNameSetting, UserNameSettingViewModel>();
             reg.RegisterDialog<NewRepositoryDialog, NewRepositoryDialogViewModel>();
+            reg.RegisterDialog<HistoryDialog, HistoryDialogViewModel>();
         }
     }
 }

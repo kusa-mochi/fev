@@ -56,7 +56,7 @@ namespace fwv.Models
         /// </summary>
         /// <param name="gitArguments">git sub command and options</param>
         /// <returns>standard output and error from git.exe</returns>
-        internal CommandOutput RunGitCommand(string gitArguments = "")
+        private CommandOutput RunGitCommand(string gitArguments = "")
         {
             return RunCommand(_exe, gitArguments);
         }
@@ -121,6 +121,33 @@ namespace fwv.Models
         {
             string args = isBare ? $" --bare --shared --initial-branch={initialBranch}" : "";
             return RunGitCommand($"init{args}");
+        }
+
+        internal CommandOutput GetUserName()
+        {
+            return RunGitCommand("config --global user.name");
+        }
+
+        internal CommandOutput SetUserName(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                return new CommandOutput
+                {
+                    StandardOutput = "",
+                    StandardError = "invalid user name is input to GitManager."
+                };
+            }
+
+            return RunGitCommand($"config --global user.name \"{userName}\"");
+        }
+
+        internal CommandOutput Log(bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
+        {
+            string command = "log";
+            command += nameOnly ? " --name-only" : "";
+            command += $" --date=format:\"{dateFormat}\"";
+            return RunGitCommand(command);
         }
 
         #endregion

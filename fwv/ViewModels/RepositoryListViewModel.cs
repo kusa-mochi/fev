@@ -20,10 +20,29 @@ namespace fwv.ViewModels
         private IDialogService _dialogService = null;
         private GitManager _git = GitManager.GetInstance();
         private FileWatcher _fileWatcher = new FileWatcher();
+        private LogManager _log = LogManager.GetInstance();
 
         #endregion
 
         #region Properties
+
+        private string _userName;
+        public string UserName
+        {
+            get { return _userName; }
+            set
+            {
+                SetProperty(ref _userName, value);
+                TopMessage = $"Hi, {_userName}";
+            }
+        }
+
+        private string _topMessage;
+        public string TopMessage
+        {
+            get { return _topMessage; }
+            set { SetProperty(ref _topMessage, value); }
+        }
 
         private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         public ObservableCollection<RepositoryListItem> Repositories
@@ -42,6 +61,48 @@ namespace fwv.ViewModels
         #endregion
 
         #region Commands
+
+        private DelegateCommand _validateUserName;
+        public DelegateCommand ValidateUserName =>
+            _validateUserName ?? (_validateUserName = new DelegateCommand(ExecuteValidateUserName));
+        void ExecuteValidateUserName()
+        {
+            _git.WorkingDirectory = string.Empty;
+            CommandOutput commandOutput = _git.GetUserName();
+            string currentUserName = commandOutput.StandardOutput;
+
+            // if a user name is not set to git global setting,
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                _log.AppendLog("user name is not registered yet.");
+
+                // show a dialog for setting user name.
+                _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
+                {
+                    IDialogParameters p = result.Parameters;
+
+                    switch (result.Result)
+                    {
+                        case ButtonResult.OK:
+                            {
+                                string userInput = result.Parameters.GetValue<string>("UserName");
+                                _git.SetUserName(userInput);
+                                UserName = userInput;
+                                break;
+                            }
+                        default:
+                            {
+                                fwv.App.Current.Shutdown(1);
+                                break;
+                            }
+                    }
+                });
+            }
+            else
+            {
+                UserName = currentUserName;
+            }
+        }
 
         private DelegateCommand _CreateRepositoryCommand;
         public DelegateCommand CreateRepositoryCommand =>
@@ -72,10 +133,11 @@ namespace fwv.ViewModels
         {
             _dialogService.ShowDialog(typeof(fwv.Views.NewRepositoryDialog).Name, result =>
             {
+                IDialogParameters p = result.Parameters;
+
                 switch (result.Result)
                 {
                     case ButtonResult.OK:
-                        IDialogParameters p = result.Parameters;
                         Enum.TryParse(p.GetValue<string>("RepositoryPlace"), out RepositoryPlace repositoryPlace);
                         string repositoryUrl = repositoryPlace switch
                         {
@@ -127,6 +189,16 @@ namespace fwv.ViewModels
                     break;
                 }
             }
+        }
+
+        private DelegateCommand _OpenHistoryDialogCommand;
+        public DelegateCommand OpenHistoryDialogCommand =>
+            _OpenHistoryDialogCommand ?? (_OpenHistoryDialogCommand = new DelegateCommand(ExecuteOpenHistoryDialogCommand));
+        void ExecuteOpenHistoryDialogCommand()
+        {
+            _dialogService.ShowDialog(typeof(fwv.Views.HistoryDialog).Name, result =>
+            {
+            });
         }
 
         #endregion

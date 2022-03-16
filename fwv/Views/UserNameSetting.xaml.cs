@@ -11,23 +11,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using fwv.ViewModels;
-
 namespace fwv.Views
 {
     /// <summary>
-    /// Interaction logic for RepositoryList.xaml
+    /// Interaction logic for UserNameSetting.xaml
     /// </summary>
-    public partial class RepositoryList : UserControl
+    public partial class UserNameSetting : UserControl
     {
-        public RepositoryList()
+        public UserNameSetting()
         {
             InitializeComponent();
-
-            _vm = this.DataContext as RepositoryListViewModel;
-            _vm.ValidateUserName.Execute();
         }
-
-        private RepositoryListViewModel _vm = null;
     }
 }
