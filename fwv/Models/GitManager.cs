@@ -147,10 +147,10 @@ namespace fwv.Models
             return RunGitCommand($"config --global user.name \"{userName}\"");
         }
 
-        internal CommandOutput Log(bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
+        internal CommandOutput Log(bool summary = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
         {
             string command = "log";
-            command += nameOnly ? " --name-only" : "";
+            command += summary ? " --summary" : "";
             command += $" --date=format:\"{dateFormat}\"";
             return RunGitCommand(command);
         }

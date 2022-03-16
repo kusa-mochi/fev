@@ -28,6 +28,33 @@ namespace fwv.ViewModels
 
         #region Private Methods
 
+        private ModificationSummary ConvertStringToModificationSummary(string fileLogString)
+        {
+            string[] splited = fileLogString.Split(" ");
+            switch (splited[0])
+            {
+                case "create":
+                    break;
+                case "":
+                    break;
+                case "rename":
+                    break;
+                case "delete":
+                    break;
+                case "":
+                    break;
+                case "":
+                    break;
+                case "":
+                    break;
+                case "":
+                    break;
+                default:
+                    break;
+            }
+            return new ModificationSummary { TargetFile = null, Operation = Operation.None };
+        }
+
         private List<HistoryListItem> ConvertLogToHistoryList(string logString)
         {
             List<HistoryListItem> output = new List<HistoryListItem>();
@@ -43,7 +70,7 @@ namespace fwv.ViewModels
                 string commitId = null;
                 string authorName = null;
                 DateTime date = DateTime.MinValue;
-                List<string> fileList = null;
+                List<ModificationSummary> modifications = null;
 
                 while (reader.Peek() > -1)
                 {
@@ -89,18 +116,19 @@ namespace fwv.ViewModels
                         case NextReadingHistoryState.FileList:
                             {
 
-                                fileList = new List<string>();
+                                modifications = new List<ModificationSummary>();
 
-                                for (string filePath = line; !string.IsNullOrWhiteSpace(filePath); filePath = reader.ReadLine())
+                                for (string fileModiSummary = line; !string.IsNullOrWhiteSpace(fileModiSummary); fileModiSummary = reader.ReadLine())
                                 {
-                                    fileList.Add(filePath);
+                                    ModificationSummary summary = ConvertStringToModificationSummary(fileModiSummary);
+                                    modifications.Add(summary);
                                 }
 
                                 Histories.Add(new HistoryListItem
                                 {
                                     TimeStamp = date,
                                     AuthorName = authorName,
-                                    ModifiedObjects = new ObservableCollection<string>(fileList)
+                                    ModifiedObjects = new ObservableCollection<ModificationSummary>(modifications)
                                 });
 
                                 _readingState = NextReadingHistoryState.Commit;

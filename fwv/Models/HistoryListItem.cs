@@ -9,6 +9,6 @@ namespace fwv.Models
     {
         public string AuthorName { get; set; } = string.Empty;
         public DateTime TimeStamp { get; set; } = DateTime.MinValue;
-        public ObservableCollection<string> ModifiedObjects { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<ModificationSummary> ModifiedObjects { get; set; } = new ObservableCollection<ModificationSummary>();
     }
 }
