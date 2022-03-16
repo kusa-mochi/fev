@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -142,10 +142,11 @@ namespace fwv.Models
             return RunGitCommand($"config --global user.name \"{userName}\"");
         }
 
-        internal CommandOutput Log(bool nameOnly = false)
+        internal CommandOutput Log(bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
         {
             string command = "log";
             command += nameOnly ? " --name-only" : "";
+            command += $" --date=format:\"{dateFormat}\"";
             return RunGitCommand(command);
         }
 
