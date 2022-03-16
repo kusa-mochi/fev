@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -109,6 +109,7 @@ namespace fwv.ViewModels
                         default:
                             {
                                 string errorMessage = $"invalid reading history state: {_readingState}";
+                                _log.AppendErrorLog(errorMessage);
                                 throw new InvalidOperationException(errorMessage);
                             }
                     }
@@ -262,6 +263,7 @@ namespace fwv.ViewModels
         #region Fields
 
         private GitManager _git = GitManager.GetInstance();
+        private LogManager _log = LogManager.GetInstance();
 
         private enum NextReadingHistoryState
         {
