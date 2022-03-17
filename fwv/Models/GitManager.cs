@@ -128,6 +128,11 @@ namespace fwv.Models
             return RunGitCommand("config --global user.name");
         }
 
+        internal CommandOutput GetRemoteUrl()
+        {
+            return RunGitCommand("remote get-url origin");
+        }
+
         internal CommandOutput SetUserName(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
