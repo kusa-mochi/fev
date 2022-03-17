@@ -62,6 +62,8 @@ namespace fwv.ViewModels
 
         #region Commands
 
+        #region ValidateUserName
+
         private DelegateCommand _validateUserName;
         public DelegateCommand ValidateUserName =>
             _validateUserName ?? (_validateUserName = new DelegateCommand(ExecuteValidateUserName));
@@ -104,6 +106,10 @@ namespace fwv.ViewModels
             }
         }
 
+        #endregion
+
+        #region CreateRepositoryCommand
+
         private DelegateCommand _CreateRepositoryCommand;
         public DelegateCommand CreateRepositoryCommand =>
             _CreateRepositoryCommand ?? (_CreateRepositoryCommand = new DelegateCommand(ExecuteCreateRepositoryCommand));
@@ -125,6 +131,10 @@ namespace fwv.ViewModels
                 _git.Init(true);
             }
         }
+
+        #endregion
+
+        #region OpenNewRepositoryDialogCommand
 
         private DelegateCommand _openNewRepositoryDialogCommand;
         public DelegateCommand OpenNewRepositoryDialogCommand =>
@@ -174,6 +184,10 @@ namespace fwv.ViewModels
             });
         }
 
+        #endregion
+
+        #region RemoveRepositoryCommand
+
         private DelegateCommand<string> _removeRepositoryCommand;
         public DelegateCommand<string> RemoveRepositoryCommand =>
             _removeRepositoryCommand ?? (_removeRepositoryCommand = new DelegateCommand<string>(ExecuteRemoveRepositoryCommand));
@@ -191,6 +205,10 @@ namespace fwv.ViewModels
             }
         }
 
+        #endregion
+
+        #region OpenHistoryDialogCommand
+
         private DelegateCommand _OpenHistoryDialogCommand;
         public DelegateCommand OpenHistoryDialogCommand =>
             _OpenHistoryDialogCommand ?? (_OpenHistoryDialogCommand = new DelegateCommand(ExecuteOpenHistoryDialogCommand));
@@ -200,6 +218,10 @@ namespace fwv.ViewModels
             {
             });
         }
+
+        #endregion
+
+        #region AddRepositoryCommand
 
         private DelegateCommand _addRepositoryCommand;
         public DelegateCommand AddRepositoryCommand =>
@@ -243,6 +265,8 @@ namespace fwv.ViewModels
                 _fileWatcher.AddDirectory(newItem.Hash, newItem.LocalDirectoryPath);
             }
         }
+
+        #endregion
 
         #endregion
 

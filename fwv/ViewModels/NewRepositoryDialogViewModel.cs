@@ -76,6 +76,8 @@ namespace fwv.ViewModels
 
         #region Commands
 
+        #region OkCommand
+
         private DelegateCommand _okCommand;
         public DelegateCommand OkCommand =>
             _okCommand ?? (_okCommand = new DelegateCommand(ExecuteOkCommand));
@@ -92,6 +94,10 @@ namespace fwv.ViewModels
             RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
         }
 
+        #endregion
+
+        #region CancelCommand
+
         private DelegateCommand _cancelCommand;
         public DelegateCommand CancelCommand =>
             _cancelCommand ?? (_cancelCommand = new DelegateCommand(ExecuteCancelCommand));
@@ -102,6 +108,10 @@ namespace fwv.ViewModels
         }
 
         #endregion
+
+        #endregion
+
+        #region Implementation of IDialogAware
 
         public string Title => "New Folder Settings";
 
@@ -119,5 +129,7 @@ namespace fwv.ViewModels
         public void OnDialogOpened(IDialogParameters parameters)
         {
         }
+
+        #endregion
     }
 }

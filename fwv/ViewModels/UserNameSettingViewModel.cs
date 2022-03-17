@@ -13,6 +13,8 @@ namespace fwv.ViewModels
 {
     public class UserNameSettingViewModel : BindableBase, IDialogAware
     {
+        #region Properties
+
         private string _userName = string.Empty;
         public string UserName
         {
@@ -23,6 +25,10 @@ namespace fwv.ViewModels
                 OkCommand.RaiseCanExecuteChanged();
             }
         }
+
+        #endregion
+
+        #region Commands
 
         private DelegateCommand _okCommand;
         public DelegateCommand OkCommand =>
@@ -40,6 +46,8 @@ namespace fwv.ViewModels
         {
             return !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
         }
+
+        #endregion
 
         #region Implementation of IDialogAware
 
