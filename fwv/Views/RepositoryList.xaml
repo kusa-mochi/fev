@@ -13,9 +13,11 @@
                     HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,8,0">Create Repository</Button>
             <Button Command="{Binding OpenNewRepositoryDialogCommand}"
                     Style="{StaticResource MaterialDesignFlatLightBgButton}" HorizontalAlignment="Left"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center" Margin="0,0,8,0">
                 Checkout
             </Button>
+            <Button Command="{Binding AddRepositoryCommand}" Style="{StaticResource MaterialDesignFlatLightBgButton}"
+                    HorizontalAlignment="Left" VerticalAlignment="Center">Add Repository</Button>
         </StackPanel>
         <ListView x:Name="_repositoryListView" ItemsSource="{Binding Repositories}"
                 SelectedItem="{Binding ActiveItem, Mode=OneWayToSource}" SelectionMode="Single"

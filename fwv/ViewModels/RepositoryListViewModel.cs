@@ -201,9 +201,52 @@ namespace fwv.ViewModels
             });
         }
 
+        private DelegateCommand _addRepositoryCommand;
+        public DelegateCommand AddRepositoryCommand =>
+            _addRepositoryCommand ?? (_addRepositoryCommand = new DelegateCommand(ExecuteAddRepositoryCommand));
+        void ExecuteAddRepositoryCommand()
+        {
+            using (CommonOpenFileDialog dlg = new CommonOpenFileDialog()
+            {
+                Title = "Choose a directory",
+                IsFolderPicker = true,
+                RestoreDirectory = true,
+                Multiselect = false
+            })
+            {
+                CommonFileDialogResult result = dlg.ShowDialog();
+                if (result != CommonFileDialogResult.Ok) return;
+
+                string dirPath = dlg.FileName;
+                dirPath = TrimEndRepositoryUrl(dirPath);
+
+                _git.WorkingDirectory = dirPath;
+                CommandOutput commandOutput = _git.GetRemoteUrl();
+                if (!string.IsNullOrWhiteSpace(commandOutput.StandardError))
+                {
+                    _log.AppendErrorLog(commandOutput.StandardError);
+                    System.Windows.MessageBox.Show("Error: This is not a Git repository.");
+                    return;
+                }
+                string remoteUrl = commandOutput.StandardOutput;
+
+                RepositoryListItem newItem = new RepositoryListItem
+                {
+                    IsModified = false,
+                    RepositoryUrl = remoteUrl,
+                    LocalDirectoryPath = dirPath
+                };
+
+                Repositories.Add(newItem);
+
+                // start watching.
+                _fileWatcher.AddDirectory(newItem.Hash, newItem.LocalDirectoryPath);
+            }
+        }
+
         #endregion
 
-        #region Methods
+        #region Private Methods
 
         private void OnFilesModified(object sender, ModifiedEventArgs args)
         {
@@ -222,6 +265,18 @@ namespace fwv.ViewModels
             _git.EnqueueCommand(new GitAddCommandItem(workingDirectory));
             _git.EnqueueCommand(new GitCommitCommandItem(workingDirectory));
             _git.EnqueueCommand(new GitPushCommandItem(workingDirectory));
+        }
+
+        private string TrimEndRepositoryUrl(string url)
+        {
+            string output = string.Empty;
+            string urlEnd = url.Substring(url.Length - 4);
+            if (urlEnd == ".git")
+            {
+                output = url.Substring(0, url.Length - 4);
+            }
+
+            return output;
         }
 
         #endregion
