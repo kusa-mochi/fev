@@ -102,6 +102,7 @@ namespace fwv.ViewModels
             }
             else
             {
+                _log.AppendLog($"user name is already registered: {currentUserName}");
                 UserName = currentUserName;
             }
         }
