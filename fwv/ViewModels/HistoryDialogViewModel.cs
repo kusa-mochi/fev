@@ -127,6 +127,8 @@ namespace fwv.ViewModels
 
         public HistoryDialogViewModel()
         {
+            _log.AppendLog("initializing..");
+
             CommandOutput rawGitLog = _git.Log(true);
             if (!string.IsNullOrEmpty(rawGitLog.StandardError))
             {
@@ -135,6 +137,8 @@ namespace fwv.ViewModels
 
             List<HistoryListItem> historyList = ConvertLogToHistoryList(rawGitLog.StandardOutput);
             Histories.AddRange(historyList);
+
+            _log.AppendLog("initialized.");
         }
 
         #endregion

@@ -69,6 +69,8 @@ namespace fwv.ViewModels
             _validateUserName ?? (_validateUserName = new DelegateCommand(ExecuteValidateUserName));
         void ExecuteValidateUserName()
         {
+            _log.AppendLog("executing..");
+
             _git.WorkingDirectory = string.Empty;
             CommandOutput commandOutput = _git.GetUserName();
             string currentUserName = commandOutput.StandardOutput;
@@ -105,6 +107,8 @@ namespace fwv.ViewModels
                 _log.AppendLog($"user name is already registered: {currentUserName}");
                 UserName = currentUserName;
             }
+
+            _log.AppendLog("executed.");
         }
 
         #endregion
@@ -310,9 +314,11 @@ namespace fwv.ViewModels
 
         public RepositoryListViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
+            _log.AppendLog("initializing..");
             this._regionManager = regionManager;
             this._dialogService = dialogService;
             this._fileWatcher.Modified += OnFilesModified;
+            _log.AppendLog("initialized.");
         }
 
         #endregion

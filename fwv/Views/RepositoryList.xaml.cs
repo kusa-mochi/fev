@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using fwv.Common;
 using fwv.ViewModels;
 
 namespace fwv.Views
@@ -22,12 +23,17 @@ namespace fwv.Views
     {
         public RepositoryList()
         {
+            _log.AppendLog("initializing..");
+
             InitializeComponent();
 
             _vm = this.DataContext as RepositoryListViewModel;
             _vm.ValidateUserName.Execute();
+
+            _log.AppendLog("initialized.");
         }
 
         private RepositoryListViewModel _vm = null;
+        private LogManager _log = LogManager.GetInstance();
     }
 }

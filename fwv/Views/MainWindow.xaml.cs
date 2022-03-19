@@ -12,11 +12,11 @@ namespace fwv.Views
     {
         public MainWindow()
         {
-            _logManager.AppendLog("begin.");
+            _log.AppendLog("initializing..");
             InitializeComponent();
-            _logManager.AppendLog("fin.");
+            _log.AppendLog("initialized.");
         }
 
-        private LogManager _logManager = LogManager.GetInstance();
+        private LogManager _log = LogManager.GetInstance();
     }
 }

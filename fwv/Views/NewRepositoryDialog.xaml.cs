@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using fwv.Common;
 using fwv.ViewModels;
 
 namespace fwv.Views
@@ -22,9 +23,11 @@ namespace fwv.Views
     {
         public NewRepositoryDialog()
         {
+            _log.AppendLog("initializing..");
             InitializeComponent();
             _vm = new NewRepositoryDialogViewModel();
             this.DataContext = _vm;
+            _log.AppendLog("initialized.");
         }
 
         private void SelectLocalBareRepository(object sender, RoutedEventArgs e)
@@ -64,5 +67,6 @@ namespace fwv.Views
         }
 
         private NewRepositoryDialogViewModel _vm = null;
+        private LogManager _log = LogManager.GetInstance();
     }
 }
