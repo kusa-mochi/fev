@@ -41,6 +41,17 @@ namespace fwv.ViewModels
 
         #endregion
 
+        #region EmailAddress
+
+        private string _emailAddress;
+        public string EmailAddress
+        {
+            get { return _emailAddress; }
+            set { SetProperty(ref _emailAddress, value); }
+        }
+
+        #endregion
+
         #region TopMessage
 
         private string _topMessage;
