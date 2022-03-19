@@ -26,6 +26,8 @@ namespace fwv.ViewModels
 
         #region Properties
 
+        #region UserName
+
         private string _userName;
         public string UserName
         {
@@ -37,12 +39,20 @@ namespace fwv.ViewModels
             }
         }
 
+        #endregion
+
+        #region TopMessage
+
         private string _topMessage;
         public string TopMessage
         {
             get { return _topMessage; }
             set { SetProperty(ref _topMessage, value); }
         }
+
+        #endregion
+
+        #region Repositories
 
         private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         public ObservableCollection<RepositoryListItem> Repositories
@@ -51,12 +61,18 @@ namespace fwv.ViewModels
             set { SetProperty(ref _repositories, value); }
         }
 
+        #endregion
+
+        #region ActiveItem
+
         private RepositoryListItem _activeItem = null;
         public RepositoryListItem ActiveItem
         {
             get { return _activeItem; }
             set { SetProperty(ref _activeItem, value); }
         }
+
+        #endregion
 
         #endregion
 
