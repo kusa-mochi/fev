@@ -15,6 +15,8 @@ namespace fwv.ViewModels
     {
         #region Properties
 
+        #region UserName
+
         private string _userName = string.Empty;
         public string UserName
         {
@@ -28,6 +30,23 @@ namespace fwv.ViewModels
 
         #endregion
 
+        #region EmailAddress
+
+        private string _emailAddress = string.Empty;
+        public string EmailAddress
+        {
+            get { return _emailAddress; }
+            set
+            {
+                SetProperty(ref _emailAddress, value);
+                OkCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #region Commands
 
         private DelegateCommand _okCommand;
@@ -38,13 +57,16 @@ namespace fwv.ViewModels
             DialogResultParameters p = new DialogResultParameters();
             p.AddRange(new Dictionary<string, object>
             {
-                { "UserName", UserName }
+                { "UserName", UserName },
+                { "EmailAddress", EmailAddress }
             });
             RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
         }
         bool CanExecuteOkCommand()
         {
-            return !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
+            bool isValidUserName = !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
+            bool isValidEmailAddress = !string.IsNullOrWhiteSpace(EmailAddress) && !Regex.IsMatch(EmailAddress, @"\s");
+            return isValidUserName && isValidEmailAddress;
         }
 
         #endregion
