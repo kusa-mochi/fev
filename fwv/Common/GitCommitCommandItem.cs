@@ -8,7 +8,7 @@ namespace fwv.Common
 {
     public class GitCommitCommandItem : GitCommandItemBase
     {
-        public string Message = null;
+        public string Message { get; set; } = null;
 
         public override object Clone()
         {
