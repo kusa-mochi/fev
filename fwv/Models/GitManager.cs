@@ -164,7 +164,7 @@ namespace fwv.Models
             _logManager.AppendLog($"runnig command.. \"{fileName} {args}\"");
             if (!CanRunGitCommand)
             {
-                string logMessage = $"git is busy now. command \"{fileName} {args}\" was not executed.";
+                string logMessage = $"GitManager is busy now. command \"{fileName} {args}\" was not executed.";
                 _logManager.AppendErrorLog(logMessage);
                 return new CommandOutput { StandardOutput = "", StandardError = logMessage };
             }
@@ -219,7 +219,7 @@ namespace fwv.Models
             }
             if (!CanRunGitCommand)
             {
-                _logManager.AppendErrorLog("the git is busy now. Dequeue() was not called.");
+                _logManager.AppendErrorLog("GitManager is busy now. Dequeue() was not called.");
                 return;
             }
 
