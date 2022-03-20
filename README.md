@@ -10,6 +10,7 @@ You just use File Explorer as usual.
 * Daily management of files used for office work such as Word and Excel. (Not for programming)
 
 # requirement
+* Windows 11 64bit
 * Git 2.35.x
   * You only need to install it, but don't have to use it by yourself.
 
