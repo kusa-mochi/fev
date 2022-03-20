@@ -1,5 +1,5 @@
 # fwv
-File system Watcher with Versioning for windows 11.
+**F**ile system **W**atcher with **V**ersioning for windows 11.
 
 # concept
 You don't need to be a specialist in tools (such as Git) to manage file versions.
