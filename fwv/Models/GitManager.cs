@@ -219,6 +219,8 @@ namespace fwv.Models
             _logManager.AppendLog(output);
             _logManager.AppendErrorLog(error);
 
+            CanRunGitCommand = true;
+
             return new CommandOutput { StandardOutput = output, StandardError = error };
         }
 
@@ -227,6 +229,7 @@ namespace fwv.Models
             if (_gitCommandQueue.Count == 0)
             {
                 _logManager.AppendLog("there is no command to execute in the queue.");
+                CanRunGitCommand = true;
                 return;
             }
             if (!CanRunGitCommand)
