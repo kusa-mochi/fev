@@ -99,11 +99,11 @@ namespace fwv.ViewModels
             _log.AppendLog("executing..");
 
             _git.WorkingDirectory = string.Empty;
-            CommandOutput commandOutput = _git.GetUserName();
-            string currentUserName = commandOutput.StandardOutput;
+            string currentUserName = _git.GetUserName().StandardOutput;
+            string currentEmailAddress = _git.GetEmailAddress().StandardOutput;
 
             // if a user name is not set to git global setting,
-            if (string.IsNullOrEmpty(currentUserName))
+            if (string.IsNullOrEmpty(currentUserName) || string.IsNullOrEmpty(currentEmailAddress))
             {
                 _log.AppendLog("user config is not registered yet.");
 
@@ -116,9 +116,12 @@ namespace fwv.ViewModels
                     {
                         case ButtonResult.OK:
                             {
-                                string userInput = result.Parameters.GetValue<string>("UserName");
-                                _git.SetUserName(userInput);
-                                UserName = userInput;
+                                string userName = result.Parameters.GetValue<string>("UserName");
+                                string emailAddress = result.Parameters.GetValue<string>("EmailAddress");
+                                _git.SetUserName(userName);
+                                _git.SetEmailAddress(emailAddress);
+                                UserName = userName;
+                                EmailAddress = emailAddress;
                                 break;
                             }
                         default:
@@ -133,6 +136,7 @@ namespace fwv.ViewModels
             {
                 _log.AppendLog($"user config is already registered: {currentUserName}, {currentEmailAddress}");
                 UserName = currentUserName;
+                EmailAddress = currentEmailAddress;
             }
 
             _log.AppendLog("executed.");
