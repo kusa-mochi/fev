@@ -11,10 +11,9 @@ namespace fwv.Models
         {
             get
             {
-                MD5 alg = MD5.Create();
                 string inputString = $"{RepositoryUrl}{LocalDirectoryPath}";
-                byte[] rawHash = alg.ComputeHash(Encoding.ASCII.GetBytes(inputString));
-                return Convert.ToBase64String(rawHash);
+                string hash = HashGenerator.CreateMD5(inputString);
+                return hash;
             }
         }
         public bool IsModified { get; set; }

@@ -8,12 +8,15 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
 using fwv.Common;
+using fwv.Models;
 
 namespace fwv.ViewModels
 {
     public class UserNameSettingViewModel : BindableBase, IDialogAware
     {
         #region Properties
+
+        #region UserName
 
         private string _userName = string.Empty;
         public string UserName
@@ -28,6 +31,18 @@ namespace fwv.ViewModels
 
         #endregion
 
+        #endregion
+
+        #region Private Methods
+
+        private string CreateDummyEmailAddress()
+        {
+
+            return HashGenerator.CreateRandomEmailAddress(64);
+        }
+
+        #endregion
+
         #region Commands
 
         private DelegateCommand _okCommand;
@@ -35,16 +50,19 @@ namespace fwv.ViewModels
             _okCommand ?? (_okCommand = new DelegateCommand(ExecuteOkCommand, CanExecuteOkCommand));
         void ExecuteOkCommand()
         {
+            string emailAddress = CreateDummyEmailAddress();
             DialogResultParameters p = new DialogResultParameters();
             p.AddRange(new Dictionary<string, object>
             {
-                { "UserName", UserName }
+                { "UserName", UserName },
+                { "EmailAddress", emailAddress }
             });
             RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
         }
         bool CanExecuteOkCommand()
         {
-            return !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
+            bool isValidUserName = !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
+            return isValidUserName;
         }
 
         #endregion

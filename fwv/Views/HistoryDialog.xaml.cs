@@ -11,6 +11,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using fwv.Common;
+
 namespace fwv.Views
 {
     /// <summary>
@@ -20,7 +22,11 @@ namespace fwv.Views
     {
         public HistoryDialog()
         {
+            _log.AppendLog("initializing..");
             InitializeComponent();
+            _log.AppendLog("initialized.");
         }
+
+        private LogManager _log = LogManager.GetInstance();
     }
 }

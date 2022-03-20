@@ -26,6 +26,8 @@ namespace fwv.ViewModels
 
         #region Properties
 
+        #region UserName
+
         private string _userName;
         public string UserName
         {
@@ -37,12 +39,31 @@ namespace fwv.ViewModels
             }
         }
 
+        #endregion
+
+        #region EmailAddress
+
+        private string _emailAddress;
+        public string EmailAddress
+        {
+            get { return _emailAddress; }
+            set { SetProperty(ref _emailAddress, value); }
+        }
+
+        #endregion
+
+        #region TopMessage
+
         private string _topMessage;
         public string TopMessage
         {
             get { return _topMessage; }
             set { SetProperty(ref _topMessage, value); }
         }
+
+        #endregion
+
+        #region Repositories
 
         private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
         public ObservableCollection<RepositoryListItem> Repositories
@@ -51,12 +72,18 @@ namespace fwv.ViewModels
             set { SetProperty(ref _repositories, value); }
         }
 
+        #endregion
+
+        #region ActiveItem
+
         private RepositoryListItem _activeItem = null;
         public RepositoryListItem ActiveItem
         {
             get { return _activeItem; }
             set { SetProperty(ref _activeItem, value); }
         }
+
+        #endregion
 
         #endregion
 
@@ -69,14 +96,16 @@ namespace fwv.ViewModels
             _validateUserName ?? (_validateUserName = new DelegateCommand(ExecuteValidateUserName));
         void ExecuteValidateUserName()
         {
+            _log.AppendLog("executing..");
+
             _git.WorkingDirectory = string.Empty;
-            CommandOutput commandOutput = _git.GetUserName();
-            string currentUserName = commandOutput.StandardOutput;
+            string currentUserName = _git.GetUserName().StandardOutput;
+            string currentEmailAddress = _git.GetEmailAddress().StandardOutput;
 
             // if a user name is not set to git global setting,
-            if (string.IsNullOrEmpty(currentUserName))
+            if (string.IsNullOrEmpty(currentUserName) || string.IsNullOrEmpty(currentEmailAddress))
             {
-                _log.AppendLog("user name is not registered yet.");
+                _log.AppendLog("user config is not registered yet.");
 
                 // show a dialog for setting user name.
                 _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
@@ -87,9 +116,12 @@ namespace fwv.ViewModels
                     {
                         case ButtonResult.OK:
                             {
-                                string userInput = result.Parameters.GetValue<string>("UserName");
-                                _git.SetUserName(userInput);
-                                UserName = userInput;
+                                string userName = result.Parameters.GetValue<string>("UserName");
+                                string emailAddress = result.Parameters.GetValue<string>("EmailAddress");
+                                _git.SetUserName(userName);
+                                _git.SetEmailAddress(emailAddress);
+                                UserName = userName;
+                                EmailAddress = emailAddress;
                                 break;
                             }
                         default:
@@ -102,9 +134,12 @@ namespace fwv.ViewModels
             }
             else
             {
-                _log.AppendLog($"user name is already registered: {currentUserName}");
+                _log.AppendLog($"user config is already registered: {currentUserName}, {currentEmailAddress}");
                 UserName = currentUserName;
+                EmailAddress = currentEmailAddress;
             }
+
+            _log.AppendLog("executed.");
         }
 
         #endregion
@@ -310,9 +345,11 @@ namespace fwv.ViewModels
 
         public RepositoryListViewModel(IRegionManager regionManager, IDialogService dialogService)
         {
+            _log.AppendLog("initializing..");
             this._regionManager = regionManager;
             this._dialogService = dialogService;
             this._fileWatcher.Modified += OnFilesModified;
+            _log.AppendLog("initialized.");
         }
 
         #endregion
