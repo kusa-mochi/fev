@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -47,18 +47,6 @@ namespace fwv.Models
         internal CommandOutput RunWindowsCommand(string command)
         {
             return RunCommand("cmd.exe", command);
-        }
-
-        /// <summary>
-        /// run a git command.
-        /// if you would like to run "git clone xxxxx yyyyy",
-        /// you only have to call RunGitCommand("clone xxxxx yyyyy").
-        /// </summary>
-        /// <param name="gitArguments">git sub command and options</param>
-        /// <returns>standard output and error from git.exe</returns>
-        private CommandOutput RunGitCommand(string gitArguments = "")
-        {
-            return RunCommand(_exe, gitArguments);
         }
 
         /// <summary>
@@ -158,6 +146,18 @@ namespace fwv.Models
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// run a git command.
+        /// if you would like to run "git clone xxxxx yyyyy",
+        /// you only have to call RunGitCommand("clone xxxxx yyyyy").
+        /// </summary>
+        /// <param name="gitArguments">git sub command and options</param>
+        /// <returns>standard output and error from git.exe</returns>
+        private CommandOutput RunGitCommand(string gitArguments = "")
+        {
+            return RunCommand(_exe, gitArguments);
+        }
 
         private CommandOutput RunCommand(string fileName, string args)
         {
