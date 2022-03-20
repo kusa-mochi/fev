@@ -17,7 +17,6 @@ namespace fwv
 
         protected override void RegisterTypes(IContainerRegistry reg)
         {
-            reg.RegisterForNavigation<Checkout>();
             reg.RegisterForNavigation<RepositoryList>();
             reg.RegisterDialog<UserNameSetting, UserNameSettingViewModel>();
             reg.RegisterDialog<NewRepositoryDialog, NewRepositoryDialogViewModel>();
