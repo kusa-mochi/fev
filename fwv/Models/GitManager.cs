@@ -116,9 +116,9 @@ namespace fwv.Models
             return RunGitCommand("config --global user.name");
         }
 
-        internal CommandOutput GetRemoteUrl()
+        internal CommandOutput GetEmailAddress()
         {
-            return RunGitCommand("remote get-url origin");
+            return RunGitCommand("config --global user.email");
         }
 
         internal CommandOutput SetUserName(string userName)
@@ -133,6 +133,25 @@ namespace fwv.Models
             }
 
             return RunGitCommand($"config --global user.name \"{userName}\"");
+        }
+
+        internal CommandOutput SetEmailAddress(string emailAddress)
+        {
+            if (string.IsNullOrWhiteSpace(emailAddress))
+            {
+                return new CommandOutput
+                {
+                    StandardOutput = "",
+                    StandardError = "invalid email address is input to GitManager."
+                };
+            }
+
+            return RunGitCommand($"config --global user.email \"{emailAddress}\"");
+        }
+
+        internal CommandOutput GetRemoteUrl()
+        {
+            return RunGitCommand("remote get-url origin");
         }
 
         internal CommandOutput Log(bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
