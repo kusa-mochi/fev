@@ -105,7 +105,7 @@ namespace fwv.ViewModels
             // if a user name is not set to git global setting,
             if (string.IsNullOrEmpty(currentUserName))
             {
-                _log.AppendLog("user name is not registered yet.");
+                _log.AppendLog("user config is not registered yet.");
 
                 // show a dialog for setting user name.
                 _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
@@ -131,7 +131,7 @@ namespace fwv.ViewModels
             }
             else
             {
-                _log.AppendLog($"user name is already registered: {currentUserName}");
+                _log.AppendLog($"user config is already registered: {currentUserName}, {currentEmailAddress}");
                 UserName = currentUserName;
             }
 
