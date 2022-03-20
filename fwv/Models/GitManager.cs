@@ -192,22 +192,15 @@ namespace fwv.Models
             };
 
             proc.EnableRaisingEvents = true;
-            proc.Exited += RunNextCommand;
 
             bool ret = proc.Start();
+            proc.WaitForExit();
             string output = proc.StandardOutput.ReadToEnd();
             string error = proc.StandardError.ReadToEnd();
             _logManager.AppendLog(output);
             _logManager.AppendErrorLog(error);
 
             return new CommandOutput { StandardOutput = output, StandardError = error };
-        }
-
-        private void RunNextCommand(object sender, EventArgs e)
-        {
-            _logManager.AppendLog("running next command..");
-            CanRunGitCommand = true;
-            RunCommandQueue(sender, null);
         }
 
         private void RunCommandQueue(object sender, ElapsedEventArgs e)
@@ -223,49 +216,52 @@ namespace fwv.Models
                 return;
             }
 
-            GitCommandItemBase queueItem = _gitCommandQueue.Dequeue();
-            _logManager.AppendLog($"a git \"{queueItem.Command.ToString()}\" command was dequeued.");
-            WorkingDirectory = queueItem.WorkingDirectory;
-            switch (queueItem.Command)
+            while (_gitCommandQueue.Count > 0)
             {
-                case GitCommand.Init:
-                    {
-                        GitInitCommandItem item = queueItem as GitInitCommandItem;
-                        Init(item.IsBare);
-                    }
-                    break;
-                case GitCommand.Clone:
-                    {
-                        GitCloneCommandItem item = queueItem as GitCloneCommandItem;
-                        Clone(item.RemoteUrl, item.WorkingDirectoryPath);
-                    }
-                    break;
-                case GitCommand.Add:
-                    {
-                        GitAddCommandItem item = queueItem as GitAddCommandItem;
-                        Add();
-                    }
-                    break;
-                case GitCommand.Commit:
-                    {
-                        GitCommitCommandItem item = queueItem as GitCommitCommandItem;
-                        Commit();
-                    }
-                    break;
-                case GitCommand.Push:
-                    {
-                        GitPushCommandItem item = queueItem as GitPushCommandItem;
-                        Push();
-                    }
-                    break;
-                case GitCommand.Pull:
-                    throw new NotImplementedException();
-                default:
-                    {
-                        string errorMessage = "invalid git command in queue.";
-                        _logManager.AppendErrorLog(errorMessage);
-                        throw new InvalidOperationException(errorMessage);
-                    }
+                GitCommandItemBase queueItem = _gitCommandQueue.Dequeue();
+                _logManager.AppendLog($"a git \"{queueItem.Command.ToString()}\" command was dequeued.");
+                WorkingDirectory = queueItem.WorkingDirectory;
+                switch (queueItem.Command)
+                {
+                    case GitCommand.Init:
+                        {
+                            GitInitCommandItem item = queueItem as GitInitCommandItem;
+                            Init(item.IsBare);
+                        }
+                        break;
+                    case GitCommand.Clone:
+                        {
+                            GitCloneCommandItem item = queueItem as GitCloneCommandItem;
+                            Clone(item.RemoteUrl, item.WorkingDirectoryPath);
+                        }
+                        break;
+                    case GitCommand.Add:
+                        {
+                            GitAddCommandItem item = queueItem as GitAddCommandItem;
+                            Add();
+                        }
+                        break;
+                    case GitCommand.Commit:
+                        {
+                            GitCommitCommandItem item = queueItem as GitCommitCommandItem;
+                            Commit();
+                        }
+                        break;
+                    case GitCommand.Push:
+                        {
+                            GitPushCommandItem item = queueItem as GitPushCommandItem;
+                            Push();
+                        }
+                        break;
+                    case GitCommand.Pull:
+                        throw new NotImplementedException();
+                    default:
+                        {
+                            string errorMessage = "invalid git command in queue.";
+                            _logManager.AppendErrorLog(errorMessage);
+                            throw new InvalidOperationException(errorMessage);
+                        }
+                }
             }
         }
 
