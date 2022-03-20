@@ -8,6 +8,7 @@ using Prism.Mvvm;
 using Prism.Services.Dialogs;
 
 using fwv.Common;
+using fwv.Models;
 
 namespace fwv.ViewModels
 {
@@ -30,20 +31,15 @@ namespace fwv.ViewModels
 
         #endregion
 
-        #region EmailAddress
-
-        private string _emailAddress = string.Empty;
-        public string EmailAddress
-        {
-            get { return _emailAddress; }
-            set
-            {
-                SetProperty(ref _emailAddress, value);
-                OkCommand.RaiseCanExecuteChanged();
-            }
-        }
-
         #endregion
+
+        #region Private Methods
+
+        private string CreateDummyEmailAddress()
+        {
+
+            return HashGenerator.CreateRandomEmailAddress(64);
+        }
 
         #endregion
 
@@ -54,19 +50,19 @@ namespace fwv.ViewModels
             _okCommand ?? (_okCommand = new DelegateCommand(ExecuteOkCommand, CanExecuteOkCommand));
         void ExecuteOkCommand()
         {
+            string emailAddress = CreateDummyEmailAddress();
             DialogResultParameters p = new DialogResultParameters();
             p.AddRange(new Dictionary<string, object>
             {
                 { "UserName", UserName },
-                { "EmailAddress", EmailAddress }
+                { "EmailAddress", emailAddress }
             });
             RequestClose?.Invoke(new DialogResult(ButtonResult.OK, p));
         }
         bool CanExecuteOkCommand()
         {
             bool isValidUserName = !string.IsNullOrWhiteSpace(UserName) && !Regex.IsMatch(UserName, @"\s");
-            bool isValidEmailAddress = !string.IsNullOrWhiteSpace(EmailAddress) && !Regex.IsMatch(EmailAddress, @"\s");
-            return isValidUserName && isValidEmailAddress;
+            return isValidUserName;
         }
 
         #endregion

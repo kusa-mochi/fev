@@ -10,9 +10,6 @@
         <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 Text="{Binding UserName, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                 md:HintAssist.Hint="User Name" />
-        <TextBox Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                Text="{Binding EmailAddress, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
-                md:HintAssist.Hint="Email Address" />
         <DockPanel>
             <Button DockPanel.Dock="Right" Command="{Binding OkCommand}">
                 OK
