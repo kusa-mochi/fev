@@ -163,6 +163,44 @@ namespace fwv.Models
             return RunGitCommand(command);
         }
 
+        internal CommandOutput Fetch(string branch = "main", bool origin = true)
+        {
+            if (string.IsNullOrWhiteSpace(branch))
+            {
+                return new CommandOutput
+                {
+                    StandardOutput = "",
+                    StandardError = "argument \"branch\" must not be null or empty."
+                };
+            }
+
+            string command = "fetch";
+            command += origin ? " origin" : "";
+            command += $" {branch}";
+
+            return RunGitCommand(command);
+        }
+
+        internal CommandOutput Merge(string branch = "main", bool origin = true, bool noCommit = false, bool noFf = false)
+        {
+            if (string.IsNullOrWhiteSpace(branch))
+            {
+                return new CommandOutput
+                {
+                    StandardOutput = "",
+                    StandardError = "argument \"branch\" must not be null or empty."
+                };
+            }
+
+            string targetBranch = $"{(origin ? "origin/" : "")}{branch}";
+
+            string command = "merge";
+            command += noCommit ? " --no-commit" : "";
+            command += noFf ? " --no-ff" : "";
+            command += $" {targetBranch}";
+            return RunGitCommand(command);
+        }
+
         #endregion
 
         #region Private Methods
