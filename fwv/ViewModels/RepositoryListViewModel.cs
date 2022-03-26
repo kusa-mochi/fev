@@ -89,57 +89,15 @@ namespace fwv.ViewModels
 
         #region Commands
 
-        #region ValidateUserName
+        #region OnLoadedCommand
 
-        private DelegateCommand _validateUserName;
-        public DelegateCommand ValidateUserName =>
-            _validateUserName ?? (_validateUserName = new DelegateCommand(ExecuteValidateUserName));
-        void ExecuteValidateUserName()
+        private DelegateCommand _onLoadedCommand;
+        public DelegateCommand OnLoadedCommand =>
+            _onLoadedCommand ?? (_onLoadedCommand = new DelegateCommand(ExecuteOnLoadedCommand));
+
+        void ExecuteOnLoadedCommand()
         {
-            _log.AppendLog("executing..");
-
-            _git.WorkingDirectory = string.Empty;
-            string currentUserName = _git.GetUserName().StandardOutput;
-            string currentEmailAddress = _git.GetEmailAddress().StandardOutput;
-
-            // if a user name is not set to git global setting,
-            if (string.IsNullOrEmpty(currentUserName) || string.IsNullOrEmpty(currentEmailAddress))
-            {
-                _log.AppendLog("user config is not registered yet.");
-
-                // show a dialog for setting user name.
-                _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
-                {
-                    IDialogParameters p = result.Parameters;
-
-                    switch (result.Result)
-                    {
-                        case ButtonResult.OK:
-                            {
-                                string userName = result.Parameters.GetValue<string>("UserName");
-                                string emailAddress = result.Parameters.GetValue<string>("EmailAddress");
-                                _git.SetUserName(userName);
-                                _git.SetEmailAddress(emailAddress);
-                                UserName = userName;
-                                EmailAddress = emailAddress;
-                                break;
-                            }
-                        default:
-                            {
-                                fwv.App.Current.Shutdown(1);
-                                break;
-                            }
-                    }
-                });
-            }
-            else
-            {
-                _log.AppendLog($"user config is already registered: {currentUserName}, {currentEmailAddress}");
-                UserName = currentUserName;
-                EmailAddress = currentEmailAddress;
-            }
-
-            _log.AppendLog("executed.");
+            ValidateUserName();
         }
 
         #endregion
@@ -334,6 +292,58 @@ namespace fwv.ViewModels
             output = urlEnd == ".git" ? url.Substring(0, url.Length - 4) : url;
 
             return output;
+        }
+
+        /// <summary>
+        /// Validate current user name.
+        /// If no name is registered, the dialog is shown to guide user to register its name.
+        /// </summary>
+        private void ValidateUserName()
+        {
+            _log.AppendLog("executing..");
+
+            _git.WorkingDirectory = string.Empty;
+            string currentUserName = _git.GetUserName().StandardOutput;
+            string currentEmailAddress = _git.GetEmailAddress().StandardOutput;
+
+            // if a user name is not set to git global setting,
+            if (string.IsNullOrEmpty(currentUserName) || string.IsNullOrEmpty(currentEmailAddress))
+            {
+                _log.AppendLog("user config is not registered yet.");
+
+                // show a dialog for setting user name.
+                _dialogService.ShowDialog(typeof(fwv.Views.UserNameSetting).Name, result =>
+                {
+                    IDialogParameters p = result.Parameters;
+
+                    switch (result.Result)
+                    {
+                        case ButtonResult.OK:
+                            {
+                                string userName = result.Parameters.GetValue<string>("UserName");
+                                string emailAddress = result.Parameters.GetValue<string>("EmailAddress");
+                                _git.SetUserName(userName);
+                                _git.SetEmailAddress(emailAddress);
+                                UserName = userName;
+                                EmailAddress = emailAddress;
+                                break;
+                            }
+                        default:
+                            {
+                                fwv.App.Current.Shutdown(1);
+                                break;
+                            }
+                    }
+                });
+            }
+            else
+            {
+                _log.AppendLog($"user config is already registered: {currentUserName}, {currentEmailAddress}");
+                UserName = currentUserName;
+                EmailAddress = currentEmailAddress;
+            }
+
+            _log.AppendLog("executed.");
         }
 
         #endregion
