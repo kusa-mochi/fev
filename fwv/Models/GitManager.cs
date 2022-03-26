@@ -201,6 +201,20 @@ namespace fwv.Models
             return RunGitCommand(command);
         }
 
+        internal CommandOutput Pull(string branch = "main", bool origin = true)
+        {
+            if (string.IsNullOrWhiteSpace(branch))
+            {
+                return new CommandOutput
+                {
+                    StandardOutput = "",
+                    StandardError = "argument \"branch\" must not be null or empty."
+                };
+            }
+
+            return Fetch(branch, origin) + Merge(branch, origin);
+        }
+
         #endregion
 
         #region Private Methods
