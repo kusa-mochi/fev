@@ -27,13 +27,9 @@ namespace fwv.Views
 
             InitializeComponent();
 
-            //_vm = this.DataContext as RepositoryListViewModel;
-            //_vm.ValidateUserName.Execute();
-
             _log.AppendLog("initialized.");
         }
 
-        private RepositoryListViewModel _vm = null;
         private LogManager _log = LogManager.GetInstance();
     }
 }
