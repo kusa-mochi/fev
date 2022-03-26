@@ -154,9 +154,10 @@ namespace fwv.Models
             return RunGitCommand("remote get-url origin");
         }
 
-        internal CommandOutput Log(bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
+        internal CommandOutput Log(int maxNum = 0, bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
         {
             string command = "log";
+            command += maxNum <= 0 ? "" : $" -n {maxNum}";
             command += nameOnly ? " --name-only" : "";
             command += $" --date=format:\"{dateFormat}\"";
             return RunGitCommand(command);

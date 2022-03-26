@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -129,7 +129,7 @@ namespace fwv.ViewModels
         {
             _log.AppendLog("initializing..");
 
-            CommandOutput rawGitLog = _git.Log(true);
+            CommandOutput rawGitLog = _git.Log(100, true);
             if (!string.IsNullOrEmpty(rawGitLog.StandardError))
             {
                 return;
