@@ -331,10 +331,7 @@ namespace fwv.ViewModels
         {
             string output = string.Empty;
             string urlEnd = url.Substring(url.Length - 4);
-            if (urlEnd == ".git")
-            {
-                output = url.Substring(0, url.Length - 4);
-            }
+            output = urlEnd == ".git" ? url.Substring(0, url.Length - 4) : url;
 
             return output;
         }
