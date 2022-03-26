@@ -25,7 +25,7 @@ namespace fwv.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60000")]
         public int WatchInterval {
             get {
                 return ((int)(this["WatchInterval"]));
