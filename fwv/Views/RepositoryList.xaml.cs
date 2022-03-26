@@ -27,8 +27,8 @@ namespace fwv.Views
 
             InitializeComponent();
 
-            _vm = this.DataContext as RepositoryListViewModel;
-            _vm.ValidateUserName.Execute();
+            //_vm = this.DataContext as RepositoryListViewModel;
+            //_vm.ValidateUserName.Execute();
 
             _log.AppendLog("initialized.");
         }
