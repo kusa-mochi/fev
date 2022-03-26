@@ -98,6 +98,8 @@ namespace fwv.ViewModels
         void ExecuteOnLoadedCommand()
         {
             ValidateUserName();
+            UpdateLocalFiles();
+            StartWatching();
         }
 
         #endregion
@@ -344,6 +346,16 @@ namespace fwv.ViewModels
             }
 
             _log.AppendLog("executed.");
+        }
+
+        private void UpdateLocalFiles()
+        {
+            // TODO: pull on all regitered git repositories.
+        }
+
+        private void StartWatching()
+        {
+            // TODO: start file watching for all registered local git repositories.
         }
 
         #endregion
