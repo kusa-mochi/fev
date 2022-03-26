@@ -154,9 +154,10 @@ namespace fwv.Models
             return RunGitCommand("remote get-url origin");
         }
 
-        internal CommandOutput Log(bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
+        internal CommandOutput Log(int maxNum = 0, bool nameOnly = false, string dateFormat = "%Y/%m/%d %H:%M:%S")
         {
             string command = "log";
+            command += maxNum <= 0 ? "" : $" -n {maxNum}";
             command += nameOnly ? " --name-only" : "";
             command += $" --date=format:\"{dateFormat}\"";
             return RunGitCommand(command);
@@ -196,32 +197,46 @@ namespace fwv.Models
                 throw new InvalidOperationException("WorkingDirectory property must be set before running commands.");
             }
 
-            Process proc = new Process
+            var output = new StringBuilder();
+            var error = new StringBuilder();
+
+            var startInfo = new ProcessStartInfo
             {
-                StartInfo = new ProcessStartInfo
-                {
-                    FileName = fileName,
-                    Arguments = args,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    WorkingDirectory = WorkingDirectory
-                }
+                FileName = fileName,
+                Arguments = args,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                WorkingDirectory = WorkingDirectory
             };
 
-            proc.EnableRaisingEvents = true;
+            using (Process proc = Process.Start(startInfo))
+            {
+                proc.EnableRaisingEvents = true;
 
-            bool ret = proc.Start();
-            proc.WaitForExit();
-            string output = proc.StandardOutput.ReadToEnd();
-            string error = proc.StandardError.ReadToEnd();
-            _logManager.AppendLog(output);
-            _logManager.AppendErrorLog(error);
+                proc.OutputDataReceived += (sender, e) =>
+                {
+                    output.AppendLine(e.Data);
+                };
+                proc.ErrorDataReceived += (sender, e) =>
+                {
+                    error.AppendLine(e.Data);
+                };
+
+                proc.BeginOutputReadLine();
+                proc.BeginErrorReadLine();
+                proc.WaitForExit();
+                proc.CancelOutputRead();
+                proc.CancelErrorRead();
+            }
+
+            _logManager.AppendLog(output.ToString());
+            _logManager.AppendErrorLog(error.ToString());
 
             CanRunGitCommand = true;
 
-            return new CommandOutput { StandardOutput = output, StandardError = error };
+            return new CommandOutput { StandardOutput = output.ToString(), StandardError = error.ToString() };
         }
 
         private void RunCommandQueue(object sender, ElapsedEventArgs e)

@@ -129,8 +129,8 @@ namespace fwv.ViewModels
         {
             _log.AppendLog("initializing..");
 
-            CommandOutput rawGitLog = _git.Log(true);
-            if (!string.IsNullOrEmpty(rawGitLog.StandardError))
+            CommandOutput rawGitLog = _git.Log(100, true);
+            if (!string.IsNullOrWhiteSpace(rawGitLog.StandardError))
             {
                 return;
             }
