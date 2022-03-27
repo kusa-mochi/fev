@@ -98,6 +98,7 @@ namespace fwv.ViewModels
         void ExecuteOnLoadedCommand()
         {
             ValidateUserName();
+            LoadSettings();
             UpdateLocalFiles();
             StartWatching();
         }
@@ -348,6 +349,24 @@ namespace fwv.ViewModels
             _log.AppendLog("executed.");
         }
 
+        private void LoadSettings()
+        {
+            // load user settings.
+            string loadData = Properties.Settings.Default.Repositories;
+            var tmpCollection = new RepositoryCollection(loadData);
+            Repositories.Clear();
+            foreach (var item in tmpCollection)
+            {
+                Repositories.Add(new RepositoryListItem
+                {
+                    IsModified = false,
+                    RepositoryUrl = item.RepositoryUrl,
+                    LocalDirectoryPath = item.LocalDirectoryPath
+                }
+                );
+            }
+        }
+
         private void UpdateLocalFiles()
         {
             // TODO: pull on all regitered git repositories.
@@ -369,6 +388,18 @@ namespace fwv.ViewModels
             this._dialogService = dialogService;
             this._fileWatcher.Modified += OnFilesModified;
             _log.AppendLog("initialized.");
+        }
+
+        #endregion
+
+        #region Destructor
+
+        ~RepositoryListViewModel()
+        {
+            string saveData = Repositories.Serialize();
+
+            // save user data: repositories list.
+            Properties.Settings.Default.Repositories = saveData;
         }
 
         #endregion
