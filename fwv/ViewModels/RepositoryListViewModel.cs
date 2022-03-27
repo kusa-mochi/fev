@@ -65,8 +65,8 @@ namespace fwv.ViewModels
 
         #region Repositories
 
-        private ObservableCollection<RepositoryListItem> _repositories = new ObservableCollection<RepositoryListItem>();
-        public ObservableCollection<RepositoryListItem> Repositories
+        private RepositoryCollection _repositories = new RepositoryCollection();
+        public RepositoryCollection Repositories
         {
             get { return _repositories; }
             set { SetProperty(ref _repositories, value); }
