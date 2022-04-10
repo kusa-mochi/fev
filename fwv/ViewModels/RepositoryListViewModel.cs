@@ -357,13 +357,17 @@ namespace fwv.ViewModels
             Repositories.Clear();
             foreach (var item in tmpCollection)
             {
-                Repositories.Add(new RepositoryListItem
+                var listItem = new RepositoryListItem
                 {
                     IsModified = false,
                     RepositoryUrl = item.RepositoryUrl,
                     LocalDirectoryPath = item.LocalDirectoryPath
-                }
-                );
+                };
+
+                Repositories.Add(listItem);
+
+                // start watching.
+                this._fileWatcher.AddDirectory(listItem.Hash, listItem.LocalDirectoryPath);
             }
         }
 
