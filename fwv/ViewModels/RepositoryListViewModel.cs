@@ -169,6 +169,7 @@ namespace fwv.ViewModels
                         };
 
                         Repositories.Add(newItem);
+                        SaveSettings();
 
                         // start watching.
                         _fileWatcher.AddDirectory(newItem.Hash, newItem.LocalDirectoryPath);
@@ -197,6 +198,7 @@ namespace fwv.ViewModels
                     // TODO: remove local directories/files.
 
                     Repositories.Remove(item);
+                    SaveSettings();
                     break;
                 }
             }
@@ -257,6 +259,7 @@ namespace fwv.ViewModels
                 };
 
                 Repositories.Add(newItem);
+                SaveSettings();
 
                 // start watching.
                 _fileWatcher.AddDirectory(newItem.Hash, newItem.LocalDirectoryPath);
@@ -353,6 +356,7 @@ namespace fwv.ViewModels
         {
             // load user settings.
             string loadData = Properties.Settings.Default.Repositories;
+            loadData = loadData.Replace("\r", "").Replace("\n", "");
             var tmpCollection = new RepositoryCollection(loadData);
             Repositories.Clear();
             foreach (var item in tmpCollection)
@@ -369,6 +373,15 @@ namespace fwv.ViewModels
                 // start watching.
                 this._fileWatcher.AddDirectory(listItem.Hash, listItem.LocalDirectoryPath);
             }
+        }
+
+        private void SaveSettings()
+        {
+            string saveData = Repositories.Serialize();
+
+            // save user data: repositories list.
+            Properties.Settings.Default.Repositories = saveData;
+            Properties.Settings.Default.Save();
         }
 
         private void UpdateLocalFiles()
@@ -400,10 +413,6 @@ namespace fwv.ViewModels
 
         ~RepositoryListViewModel()
         {
-            string saveData = Repositories.Serialize();
-
-            // save user data: repositories list.
-            Properties.Settings.Default.Repositories = saveData;
         }
 
         #endregion
