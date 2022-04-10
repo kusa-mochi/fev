@@ -37,6 +37,7 @@ namespace fwv.ViewModels
                 _readingState = NextReadingHistoryState.Commit;
                 string line = "";
                 Regex commitRegex = new Regex(@"commit\s+(?<id>.+)");
+                Regex mergeRegex = new Regex(@"Merge:\s*(.*)");
                 Regex authorRegex = new Regex(@"Author:\s*(?<name>[^\s]+)\s*.*");
                 Regex dateRegex = new Regex(@"Date:\s*(?<date>.+)");
                 Match match = null;
@@ -44,6 +45,7 @@ namespace fwv.ViewModels
                 string authorName = null;
                 DateTime date = DateTime.MinValue;
                 List<string> fileList = null;
+                bool isMergeCommit = false;
 
                 while (reader.Peek() > -1)
                 {
@@ -57,7 +59,22 @@ namespace fwv.ViewModels
                             {
                                 match = commitRegex.Match(line);
                                 commitId = match.Groups["id"].Value;
-                                _readingState = NextReadingHistoryState.Author;
+                                _readingState = NextReadingHistoryState.Merge;
+                                break;
+                            }
+                        case NextReadingHistoryState.Merge:
+                            {
+                                match = mergeRegex.Match(line);
+                                isMergeCommit = match.Success;
+                                if (match.Success)
+                                {
+                                    _readingState = NextReadingHistoryState.Author;
+                                    break;
+                                }
+
+                                match = authorRegex.Match(line);
+                                authorName = match.Groups["name"].Value;
+                                _readingState = NextReadingHistoryState.Date;
                                 break;
                             }
                         case NextReadingHistoryState.Author:
@@ -81,9 +98,9 @@ namespace fwv.ViewModels
                             }
                         case NextReadingHistoryState.CommitMessage:
                             {
-                                for (string message = line; !string.IsNullOrWhiteSpace(message); message = reader.ReadLine()) ;
+                                for (string message = line; !string.IsNullOrEmpty(message); message = reader.ReadLine()) ;
 
-                                _readingState = NextReadingHistoryState.FileList;
+                                _readingState = isMergeCommit ? NextReadingHistoryState.Commit : NextReadingHistoryState.FileList;
                                 break;
                             }
                         case NextReadingHistoryState.FileList:
@@ -152,6 +169,7 @@ namespace fwv.ViewModels
         {
             None,
             Commit,
+            Merge,
             Author,
             Date,
             CommitMessage,
