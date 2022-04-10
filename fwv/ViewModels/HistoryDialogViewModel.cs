@@ -144,18 +144,6 @@ namespace fwv.ViewModels
 
         public HistoryDialogViewModel()
         {
-            _log.AppendLog("initializing..");
-
-            CommandOutput rawGitLog = _git.Log(100, true);
-            if (!string.IsNullOrWhiteSpace(rawGitLog.StandardError))
-            {
-                return;
-            }
-
-            List<HistoryListItem> historyList = ConvertLogToHistoryList(rawGitLog.StandardOutput);
-            Histories.AddRange(historyList);
-
-            _log.AppendLog("initialized.");
         }
 
         #endregion
@@ -196,6 +184,21 @@ namespace fwv.ViewModels
 
         public void OnDialogOpened(IDialogParameters parameters)
         {
+            _log.AppendLog("initializing..");
+
+            DialogInputParameters dialogParams = parameters as DialogInputParameters;
+
+            _git.WorkingDirectory = dialogParams.GetValue<string>("WorkingDirectory");
+            CommandOutput rawGitLog = _git.Log(100, true);
+            if (!string.IsNullOrWhiteSpace(rawGitLog.StandardError))
+            {
+                return;
+            }
+
+            List<HistoryListItem> historyList = ConvertLogToHistoryList(rawGitLog.StandardOutput);
+            Histories.AddRange(historyList);
+
+            _log.AppendLog("initialized.");
         }
 
         #endregion

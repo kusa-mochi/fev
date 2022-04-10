@@ -208,12 +208,19 @@ namespace fwv.ViewModels
 
         #region OpenHistoryDialogCommand
 
-        private DelegateCommand _OpenHistoryDialogCommand;
-        public DelegateCommand OpenHistoryDialogCommand =>
-            _OpenHistoryDialogCommand ?? (_OpenHistoryDialogCommand = new DelegateCommand(ExecuteOpenHistoryDialogCommand));
-        void ExecuteOpenHistoryDialogCommand()
+        private DelegateCommand<string> _OpenHistoryDialogCommand;
+        public DelegateCommand<string> OpenHistoryDialogCommand =>
+            _OpenHistoryDialogCommand ?? (_OpenHistoryDialogCommand = new DelegateCommand<string>(ExecuteOpenHistoryDialogCommand));
+        void ExecuteOpenHistoryDialogCommand(string commandParam)
         {
-            _dialogService.ShowDialog(typeof(fwv.Views.HistoryDialog).Name, result =>
+            DialogInputParameters dialogParams = new DialogInputParameters();
+            dialogParams.AddRange(
+                new Dictionary<string, object>
+                {
+                    { "WorkingDirectory", commandParam }
+                }
+                );
+            _dialogService.ShowDialog(typeof(fwv.Views.HistoryDialog).Name, dialogParams, result =>
             {
             });
         }

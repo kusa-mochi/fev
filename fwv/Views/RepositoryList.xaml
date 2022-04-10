@@ -38,6 +38,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Button Style="{StaticResource MaterialDesignFlatLightBgButton}"
                                             Command="{Binding ElementName=_repositoryListView, Path=DataContext.OpenHistoryDialogCommand}"
+                                            CommandParameter="{Binding LocalDirectoryPath}"
                                             Margin="0,0,8,0">
                                         <Image Source="{StaticResource History}" Width="16" Height="16" />
                                     </Button>
